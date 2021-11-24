@@ -1,6 +1,10 @@
-Steps/Ticket.java
- Steps.Ticket
-Steps/PasosCreacionTicket.java
- Steps.PasosCreacionTicket
 CucumberTest.java
  CucumberTest
+Steps/Ticket.java
+ Steps.Ticket
+Steps/PasosCambioEstado.java
+ Steps.PasosCambioEstado
+Steps/PasosCreacionTicket.java
+ Steps.PasosCreacionTicket
+Steps/PasosGeneracionTareas.java
+ Steps.PasosGeneracionTareas

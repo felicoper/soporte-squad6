@@ -4,17 +4,14 @@ Feature: Creacion de ticket
     Given los datos validos y obligatorios ingresados para un nuevo ticket
     When el ingeniero de soporte crea un nuevo ticket con los datos
     Then el sistema registrara el nuevo ticket
-    And indica un mensaje de exito con identificador, fecha de creacion y opcion de crearle una nueva tarea al ticket
-
+    And indica un mensaje de exito con identificador y fecha de creacion
+    And dara opcion de crearle una nueva tarea
 
   Scenario: Dato obligatorio incompleto
     Given se ingresaron datos para el ticket pero con algun dato obligatorio faltante
     When el ingeniero de soporte crea un nuevo ticket con los datos
     Then el sistema no registrara el nuevo ticket
     And solicitara que ingrese los datos obligatorios
-
-
-
 
   Scenario: Cliente no existe
     Given se ingresan los datos obligatorios pero con informacion de cliente inexistente
@@ -33,7 +30,6 @@ Feature: Creacion de ticket
     When el ingeniero de soporte crea un nuevo ticket con los datos
     Then el sistema no registrara el nuevo ticket
     And solicitara que ingrese los datos de un producto existente en la empresa
-
 
 
   Scenario: Legajo de cliente menor a cero
