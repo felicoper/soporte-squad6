@@ -1,17 +1,18 @@
 package Steps;
 import cucumber.api.java.en.*;
 import org.junit.jupiter.api.Assertions;
+import com.soporte.model.Ticket;
 
 public class PasosCambioEstado {
     Ticket ticket;
 
     @Given("ticket existente con estado no cerrado")
     public void ticketExistenteEstadoNoCerrado(){
-        this.ticket = new Ticket("Abierto");
+        this.ticket = new Ticket();
     }
     @Given("ticket existente con estado cerrado")
     public void ticketExistenteEstadoCerrado(){
-        this.ticket = new Ticket("Cerrado");
+        this.ticket = new Ticket();
     }
     @When("el ingeniero de soporte cambie el ticket al nuevo estado no cerrado")
     public void cambioEstadoANuevoEstadoNoCerrado(){

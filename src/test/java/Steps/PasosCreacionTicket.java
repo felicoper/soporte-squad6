@@ -1,6 +1,6 @@
 package Steps;
 import cucumber.api.java.en.*;
-
+import com.soporte.model.Ticket;
 
 public class PasosCreacionTicket {
     Ticket ticket;
