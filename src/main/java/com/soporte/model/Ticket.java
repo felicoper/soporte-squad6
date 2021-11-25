@@ -1,5 +1,7 @@
 package com.soporte.model;
 
+import com.soporte.Exceptions.CambioEstadoTicketCerradoExcepcion;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,20 +14,35 @@ public class Ticket {
     private Long legajoCliente;
     private Long legajoPersonaAsignada;
     private Long idProducto;
-    private String estado;
+    public Severidad severidad;
+    public Estado estado;
 
-    public Ticket(){ }
+    Cliente cliente;
+    PersonaAsignada administrador;
+    Producto producto;
 
-    public Ticket(Long legajoCliente, Long legajoPersonaAsignada, Long idProducto, String estado) {
-        this.legajoCliente = legajoCliente;
-        this.legajoPersonaAsignada = legajoPersonaAsignada;
+
+    public Ticket(Cliente cliente, PersonaAsignada adminstrador, Long idProducto, Estado estado, String titulo, String descripcion, Severidad severidad, Producto producto) {
+        this.cliente = cliente;
+        this.administrador = adminstrador;
         this.idProducto = idProducto;
         this.estado = estado;
+        this.producto = producto;
+        this.severidad = severidad;
+        if (titulo.isEmpty() || descripcion.isEmpty()) {
+
+        }
     }
 
-    public void cambiarEstado(String nuevoEstado){
-        if(this.estado != "cerrado") {
-            this.estado = nuevoEstado;
+    public Ticket() {
+
+    }
+
+    public void cambiarEstado(Estado estadoNuevo) {
+        if (this.estado != Estado.CERRADO) {
+            this.estado = estadoNuevo;
+        }else{
+            throw new CambioEstadoTicketCerradoExcepcion("No se puede cambiar el estado a un ticket cerrado");
         }
     }
 
@@ -41,7 +58,10 @@ public class Ticket {
     public Long getIdProducto() {
         return this.idProducto;
     }
-    public String getEstado() {
-        return this.estado;
+    public Estado getEstado() { return this.estado; }
+
+    public void cambiarSeveridad(Severidad severidadNueva) {
+        this.severidad = severidadNueva;
+
     }
 }

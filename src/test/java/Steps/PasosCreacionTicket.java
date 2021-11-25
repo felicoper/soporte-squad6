@@ -1,13 +1,19 @@
 package Steps;
+import com.soporte.model.Cliente;
+import com.soporte.model.PersonaAsignada;
 import cucumber.api.java.en.*;
 import com.soporte.model.Ticket;
 
 public class PasosCreacionTicket {
     Ticket ticket;
+    Cliente clienteValido;
+    PersonaAsignada personsaAsignadaValida;
 
 
     @Given("los datos validos y obligatorios ingresados para un nuevo ticket")
     public Boolean validadorDatos(){
+
+
         return true;
     }
     @Given("se ingresan los datos obligatorios pero con informacion de cliente inexistente")
