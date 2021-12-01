@@ -1,13 +1,13 @@
 package com.soporte.service;
 
+import com.soporte.Exceptions.ClienteInvalidoExcepcion;
+import com.soporte.model.EstadoTicket;
 import com.soporte.model.Ticket;
 import com.soporte.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class TicketService {
@@ -15,8 +15,11 @@ public class TicketService {
     @Autowired
     private TicketRepository ticketRepository;
 
-    public Ticket createTicket(Ticket ticket) {
-        return ticketRepository.save(ticket);
+    public Ticket createTicket(Ticket ticket, ClientExternService clienteService) throws ClienteInvalidoExcepcion {
+        if(clienteService.findById(ticket.getIdCliente()) != null)
+            ticketRepository.save(ticket);
+            
+        return ticket;
     }
 
     public Collection<Ticket> getTickets() {
@@ -25,7 +28,7 @@ public class TicketService {
         return tickets;
     }
 
-    public Optional<Ticket> findById(Long id) {
+    public Optional<Ticket> findById(Integer id) {
         return ticketRepository.findById(id);
     }
 
@@ -33,7 +36,7 @@ public class TicketService {
         ticketRepository.save(ticket);
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         ticketRepository.deleteById(id);
     }
 }

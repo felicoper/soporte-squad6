@@ -1,7 +1,6 @@
 package Steps;
 import com.soporte.model.Severidad;
 import com.soporte.model.Ticket;
-import com.soporte.model.Estado;
 import cucumber.api.java.en.*;
 import org.junit.jupiter.api.Assertions;
 
@@ -10,8 +9,8 @@ public class PasosCambioSeveridadTicket {
 
     @When("^el ingeniero de soporte cierre el ticket$")
     public void el_ingeniero_de_soporte_cierre_el_ticket(){
-        ticket =  new ticket();
-        ticket.cambiarEstado(Estado.CERRADO);
+       // ticket =  new ticket();
+        //ticket.cambiarEstado(Estado.CERRADO);
     }
 
     @Then("^indica que se cerro exitosamente$")
@@ -21,8 +20,8 @@ public class PasosCambioSeveridadTicket {
 
     @When("^el ingeniero de soporte cambie la severidad del ticket$")
     public void el_ingeniero_de_soporte_cambie_la_severidad_del_ticket() {
-        ticket =  new ticket();
-        ticket.cambiarSeveridad(Severidad.S1);
+       // ticket =  new ticket();
+       // ticket.cambiarSeveridad(Severidad.S1);
     }
 
     @Then("^el sistema indica que no se puede cambiar la severidad del ticket$")

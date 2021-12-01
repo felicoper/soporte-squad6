@@ -1,5 +1,7 @@
 package com.soporte;
 
+import com.soporte.model.Cliente;
+import com.soporte.service.ClientExternService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -29,14 +31,20 @@ public class SoporteApplication {
 	@Autowired
 	private TicketService ticketService;
 
+	@Autowired
+	private ClientExternService clienteExternService;
+
 	public static void main(String[] args) {
 		SpringApplication.run(SoporteApplication.class, args);
 	}
 
+
+	/// TICKETS 
+	
 	@PostMapping("/tickets")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Ticket createTicket(@RequestBody Ticket ticket) {
-		return ticketService.createTicket(ticket);
+		return ticketService.createTicket(ticket, clienteExternService);
 	}
 
 	@GetMapping("/tickets")
@@ -45,7 +53,7 @@ public class SoporteApplication {
 	}
 
 	@PutMapping("/tickets/{id}")
-	public ResponseEntity<Ticket> updateTicket(@RequestBody Ticket ticket, @PathVariable Long id) {
+	public ResponseEntity<Ticket> updateTicket(@RequestBody Ticket ticket, @PathVariable Integer id) {
 		Optional<Ticket> ticketOptional = ticketService.findById(id);
 		if (!ticketOptional.isPresent()) {
 			return ResponseEntity.notFound().build();
@@ -56,9 +64,22 @@ public class SoporteApplication {
 	}
 
 	@DeleteMapping("/tickets/{id}")
-	public void deleteTicket(@PathVariable Long id) {
+	public void deleteTicket(@PathVariable Integer id) {
 		ticketService.deleteById(id);
 	}
+
+	/// CLIENTES
+
+	@GetMapping("/clientes")
+	public Collection<Cliente> getClientes(){
+		return clienteExternService.getClients();
+	}
+
+	@GetMapping("/clientes/{id}")
+	public Cliente getClientByID(@PathVariable("id") int id){
+        return clienteExternService.findById(id);
+	}
+
 
 	@Bean
 	public Docket apiDocket() {

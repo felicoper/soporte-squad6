@@ -1,6 +1,6 @@
 package com.soporte.model;
 
-public enum Estado {
+public enum EstadoTicket {
     ABIERTO,
     ECLIENTE,
     EDESARROLLO,
