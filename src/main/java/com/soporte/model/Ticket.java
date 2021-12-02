@@ -1,6 +1,7 @@
 package com.soporte.model;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Ticket {
@@ -16,6 +17,8 @@ public class Ticket {
 
     private EstadoTicket estado;
 
+    private Date fechaCreacion;
+
     public Ticket() {
     }
 
@@ -24,6 +27,7 @@ public class Ticket {
         this.legajoPersonaAsignada = legajoPersonaAsignada;
         this.idProducto = idProducto;
         this.estado = estado;
+        this.fechaCreacion = new Date();
     }
 
     public Integer getIdCliente() {
@@ -41,4 +45,17 @@ public class Ticket {
     public EstadoTicket getEstado() {
         return this.estado;
     }
+
+    public Date getFechaCreacion() {
+        return this.fechaCreacion;
+    }
+
+    public Integer getNumeroTicket() {
+        return this.numeroTicket;
+    }
+
+    public void setNumeroTicket(Integer numeroTicket) {
+        this.numeroTicket = numeroTicket;
+    }
+
 }
