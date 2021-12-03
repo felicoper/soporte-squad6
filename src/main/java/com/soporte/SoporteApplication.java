@@ -44,7 +44,7 @@ public class SoporteApplication {
 	@PostMapping("/tickets")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Ticket createTicket(@RequestBody Ticket ticket) {
-		return ticketService.createTicket(ticket, clienteExternService);
+		return ticketService.createTicket(ticket);
 	}
 
 	@GetMapping("/tickets")
@@ -72,7 +72,7 @@ public class SoporteApplication {
 
 	@GetMapping("/clientes")
 	public Collection<Cliente> getClientes(){
-		return clienteExternService.getClients();
+		return clienteExternService.getClientsExterns();
 	}
 
 	@GetMapping("/clientes/{id}")

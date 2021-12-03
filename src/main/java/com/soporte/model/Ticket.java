@@ -20,6 +20,7 @@ public class Ticket {
     private Date fechaCreacion;
 
     public Ticket() {
+        this.fechaCreacion = new Date();
     }
 
     public Ticket(Integer legajoCliente, Integer legajoPersonaAsignada, Integer idProducto, EstadoTicket estado) {
