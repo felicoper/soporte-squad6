@@ -1,7 +1,7 @@
 package com.soporte;
 
 import com.soporte.model.Cliente;
-import com.soporte.service.ClientExternService;
+import com.soporte.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,6 +22,9 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import com.soporte.model.Empleado;
+import com.soporte.service.EmpleadoService;
+
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @SpringBootApplication
@@ -32,7 +35,10 @@ public class SoporteApplication {
 	private TicketService ticketService;
 
 	@Autowired
-	private ClientExternService clienteExternService;
+	private ClientService clienteExternService;
+
+	@Autowired
+	private EmpleadoService empleadoService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SoporteApplication.class, args);
@@ -40,7 +46,6 @@ public class SoporteApplication {
 
 
 	/// TICKETS 
-	
 	@PostMapping("/tickets")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Ticket createTicket(@RequestBody Ticket ticket) {
@@ -78,6 +83,18 @@ public class SoporteApplication {
 	@GetMapping("/clientes/{id}")
 	public Cliente getClientByID(@PathVariable("id") int id){
         return clienteExternService.findById(id);
+	}
+
+	/// EMPLEADOS
+
+	@GetMapping("/empleados")
+	public Collection<Empleado> getEmpleados(){
+		return empleadoService.getEmpleados();
+	}
+
+	@GetMapping("/clientes/{id}")
+	public Empleado getEmpleadosByID(@PathVariable("id") int id){
+        return empleadoService.findById(id);
 	}
 
 

@@ -11,6 +11,12 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
@@ -19,19 +25,38 @@ dependencies {
     testImplementation 'io.projectreactor:reactor-test'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-    compile group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
-    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.8.0'
-    compile group: 'com.h2database', name: 'h2', version: '1.4.200'
+    implementation group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
+    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.8.0'
+    implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
     //compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
 
     testImplementation("info.cukes:cucumber-java:1.2.5")
     testImplementation("info.cukes:cucumber-junit:1.2.5")
     testImplementation("info.cukes:cucumber-spring:1.2.5")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.3.1")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.1")
+    implementation("org.junit.jupiter:junit-jupiter-engine:5.3.1")
+    testImplementation 'io.cucumber:cucumber-java:6.10.4'
 
 }
 
 test {
     useJUnitPlatform()
 }
+
+task cucumberCli() {
+    dependsOn assemble, testClasses
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = [
+              '--plugin', 'pretty',
+              '--plugin', 'html:target/cucumber-report.html', 
+              '--glue', 'com.baeldung.cucumber', 
+              'src/test/resources']
+        }
+    }
+}
+
+task stage(dependsOn: ['build', 'clean'])
+build.mustRunAfter clean

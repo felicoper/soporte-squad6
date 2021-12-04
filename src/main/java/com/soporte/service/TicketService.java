@@ -2,6 +2,7 @@ package com.soporte.service;
 
 import com.soporte.Exceptions.ClienteInvalidoExcepcion;
 import com.soporte.model.Ticket;
+import com.soporte.model.VersionProducto;
 import com.soporte.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,12 +16,23 @@ public class TicketService {
     private TicketRepository ticketRepository;
 
     @Autowired
-	private ClientExternService clienteExternService;
+	private ClientService clienteExternService;
 
-    public Ticket createTicket(Ticket ticket) throws ClienteInvalidoExcepcion {
-        if(clienteExternService.findById(ticket.getIdCliente()) != null)
-            ticketRepository.save(ticket);
-        return ticket;
+    @Autowired
+    private EmpleadoService empleadoService;
+
+    @Autowired
+    private ProductoService productoService;
+
+    public Ticket createTicket(Ticket ticketRequest) throws ClienteInvalidoExcepcion {
+        VersionProducto versionProd = productoService.buscarVersion(ticketRequest.getIdVersionProducto());
+
+        if(versionProd != null && clienteExternService.findById(ticketRequest.getIdCliente()) != null
+            && empleadoService.findById(ticketRequest.getLegajoEmpleado()) != null){
+                ticketRepository.save(ticketRequest);
+                versionProd.agregarTicket(ticketRequest);
+            }
+        return ticketRequest;
     }
 
     public Collection<Ticket> getTickets() {

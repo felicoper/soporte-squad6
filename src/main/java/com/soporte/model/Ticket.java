@@ -2,49 +2,73 @@ package com.soporte.model;
 
 import javax.persistence.*;
 import java.util.Date;
-
+// | ID | ID_CLIENTE | LEGAJO_PERSONA_ASIGNADA | ID_PRODUCTO | FECHA_CREACION | FECHA_MODIFICACION | ESTADO
 @Entity
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer numeroTicket;
 
+    private String titulo;
+
+    private String descripcion;
+    
     private Integer idCliente;
 
-    private Integer legajoPersonaAsignada;
+    private Integer legajoEmpleado;
 
-    private Integer idProducto;
+    private Integer idVersionProducto;
 
-    private EstadoTicket estado;
+    private EstadoTicket estadoTicket;
+
+    private TipoTicket tipoTicket;
 
     private Date fechaCreacion;
+
+    private Date fechaFinalizacion;
+
 
     public Ticket() {
         this.fechaCreacion = new Date();
     }
 
-    public Ticket(Integer legajoCliente, Integer legajoPersonaAsignada, Integer idProducto, EstadoTicket estado) {
+    public Ticket(String titulo, String descripcion, Integer legajoCliente, Integer legajoEmpleado, Integer idVersionProducto, TipoTicket tipoTicket) {
+        this.titulo = titulo;
+        this.descripcion = descripcion;
         this.idCliente = legajoCliente;
-        this.legajoPersonaAsignada = legajoPersonaAsignada;
-        this.idProducto = idProducto;
-        this.estado = estado;
+        this.legajoEmpleado = legajoEmpleado;
+        this.idVersionProducto = idVersionProducto;
+        this.estadoTicket = EstadoTicket.ABIERTO;
+        this.tipoTicket = tipoTicket;
         this.fechaCreacion = new Date();
+    }
+
+    public String getTitulo() {
+        return this.titulo;
+    }
+
+    public String getDescripcion() {
+        return this.descripcion;
     }
 
     public Integer getIdCliente() {
         return this.idCliente;
     }
 
-    public Integer getLegajoPersonaAsignada() {
-        return this.legajoPersonaAsignada;
+    public Integer getLegajoEmpleado() {
+        return this.legajoEmpleado;
     }
 
-    public Integer getIdProducto() {
-        return this.idProducto;
+    public Integer getIdVersionProducto() {
+        return this.idVersionProducto;
     }
 
     public EstadoTicket getEstado() {
-        return this.estado;
+        return this.estadoTicket;
+    }
+
+    public TipoTicket getTipoTicket() {
+        return this.tipoTicket;
     }
 
     public Date getFechaCreacion() {

@@ -3,8 +3,6 @@ package com.soporte.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
@@ -15,7 +13,7 @@ public class Cliente {
     @JsonProperty("razon social")
     private String razon_social;
 
-    @JsonProperty("CUIT")
+    @JsonProperty("CUIT") // revisar dsp
     private String CUIT;
 
     public Cliente(Integer id, String razon_social, String cuit) {

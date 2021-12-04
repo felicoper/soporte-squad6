@@ -2,8 +2,11 @@ package com.aninfo.integration.cucumber;
 
 import com.soporte.SoporteApplication;
 import com.soporte.repository.TicketRepository;
-import com.soporte.service.ClientExternService;
+import com.soporte.service.ClientService;
 import com.soporte.service.TicketService;
+import com.soporte.service.EmpleadoService;
+import com.soporte.service.ProductoService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -17,7 +20,13 @@ public class SoporteApplicationTest {
     protected TicketService ticketService;
 
     @Autowired
-    protected ClientExternService clientExternService;
+    protected ClientService clientExternService;
+
+    @Autowired
+    protected EmpleadoService empleadoService;
+
+    @Autowired
+    protected ProductoService productService;
 
     @Autowired
     protected TicketRepository ticketRepository;

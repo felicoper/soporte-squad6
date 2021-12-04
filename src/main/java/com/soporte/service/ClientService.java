@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class ClientExternService {
+public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
 

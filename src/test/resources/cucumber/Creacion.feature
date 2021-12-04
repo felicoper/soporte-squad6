@@ -5,7 +5,7 @@ Feature: Creacion de ticket
     Given Los datos validos y obligatorios ingresados para un nuevo ticket
     When El ingeniero de soporte crea un nuevo ticket con los datos
     Then El sistema "registrara" el nuevo ticket
-    And Indica un mensaje de exito con identificador y fecha de creacion
+    #And Indica un mensaje de exito con identificador y fecha de creacion
 
   Scenario: Dato obligatorio incompleto
     Given Se ingresaron datos para el ticket pero con algun dato obligatorio faltante
