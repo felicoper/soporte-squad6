@@ -1,5 +1,7 @@
 package com.soporte.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -10,28 +12,46 @@ import javax.persistence.*;
 public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer numeroProducto;
+    private Integer idProducto;
+
     private String nombreProducto;
-    private HashMap<Integer, VersionProducto> versionesProducto;
+    private ArrayList<VersionProducto> versionesProducto;
     
-    public Producto(Integer numeroProducto, String nombreProducto, VersionProducto versionInicial) {
-        this.numeroProducto = numeroProducto;
+    public Producto(Integer idProducto, String nombreProducto, VersionProducto versionInicial) {
+        this.idProducto = idProducto;
         this.nombreProducto = nombreProducto;
-        this.versionesProducto = new HashMap<>();
-        this.versionesProducto.put(versionInicial.getIdVersionProducto(), versionInicial);
+        this.versionesProducto = new ArrayList<>();
+        this.versionesProducto.add(versionInicial);
     }
 
-    public Integer getNumero() {
-        return this.numeroProducto;
+    public Producto() {
+    }
+
+    public Integer getIdProducto() {
+        return this.idProducto;
     }
 
     public String getNombre() {
         return this.nombreProducto;
     }
 
-    public void agregarVersion(VersionProducto versionProducto) {
-        this.versionesProducto.put(versionProducto.getIdVersionProducto(), versionProducto);
+    public ArrayList<VersionProducto> getVersiones() {
+        return this.versionesProducto;
     }
+
+    public void agregarVersion(VersionProducto versionProducto) {
+        this.versionesProducto.add(versionProducto);
+    }
+
+	public VersionProducto getVersionProducto(Integer idVersionProductoEnRequest){
+		return versionesProducto
+        .stream()
+        .filter(versionProducto -> versionProducto.getIdVersionProducto().equals(idVersionProductoEnRequest))
+        .findFirst()
+        .get();
+	}
+
+
 
 }
 

@@ -2,27 +2,24 @@ package com.aninfo.integration.cucumber;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import com.soporte.Exceptions.ClienteInvalidoExcepcion;
 import com.soporte.model.Cliente;
-import com.soporte.model.EstadoTicket;
 import com.soporte.model.Producto;
 import com.soporte.model.Ticket;
+import com.soporte.model.TicketRequest;
 import com.soporte.model.TipoTicket;
 import com.soporte.model.VersionProducto;
 import com.soporte.model.Empleado;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
-import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import java.util.Date;  
 import org.junit.Assert;
 
 public class CreacionTest extends SoporteApplicationTest{
-    Ticket ticketRequest;
+    TicketRequest ticketRequest;
     Ticket ticketCreado;
     ClienteInvalidoExcepcion excepcionRecibida;
 
@@ -41,15 +38,15 @@ public class CreacionTest extends SoporteApplicationTest{
         empleadoService.saveDatabase(new Empleado(445566, "Felipe", "Copertini"));
         empleadoService.saveDatabase(new Empleado(778899, "Mateo", "Bulnes"));
 
-        
-        Producto producto1 = new Producto(001, "SIU", new VersionProducto(1, "0.99b", new SimpleDateFormat("dd/MM/yyyy").parse("09/12/2018")));
-        producto1.agregarVersion(new VersionProducto(-2, "0.99", new SimpleDateFormat("dd/MM/yyyy").parse("09/12/2018")));
-        productService.crearProducto(producto1);
+        //asd1 seg
+        Producto producto1 = new Producto(1, "SIU", new VersionProducto(1, "0.99b", new SimpleDateFormat("dd/MM/yyyy").parse("09/12/2018")));
+        producto1.agregarVersion(new VersionProducto(2, "0.99", new SimpleDateFormat("dd/MM/yyyy").parse("09/12/2018")));
+        productService.saveDatabase(producto1);
         productService.agregarVersionProducto(producto1, new VersionProducto(2, "1.0", new SimpleDateFormat("dd/MM/yyyy").parse("09/12/2019")));
         productService.agregarVersionProducto(producto1, new VersionProducto(3, "1.0", new SimpleDateFormat("dd/MM/yyyy").parse("09/12/2020")));
         
-        Producto producto2 = new Producto(002, "Linux", new VersionProducto(4, "1.0", new SimpleDateFormat("dd/MM/yyyy").parse("09/12/2018")));
-        productService.crearProducto(producto2);
+        Producto producto2 = new Producto(2, "Linux", new VersionProducto(4, "1.0", new SimpleDateFormat("dd/MM/yyyy").parse("09/12/2018")));
+        productService.saveDatabase(producto2);
         productService.agregarVersionProducto(producto2, new VersionProducto(5, "1.1", new SimpleDateFormat("dd/MM/yyyy").parse("09/12/2019")));
         productService.agregarVersionProducto(producto2, new VersionProducto(6, "1.2", new SimpleDateFormat("dd/MM/yyyy").parse("09/12/2020")));
     }
@@ -63,8 +60,10 @@ public class CreacionTest extends SoporteApplicationTest{
         Integer legajoCliente = 100;
         Integer legajoEmpleado = 23456;
         Integer idVersionProducto = 5;
+        Integer idProducto = 2;
         TipoTicket tipoTicket = TipoTicket.CONSULTA;
-        ticketRequest = new Ticket(titulo, descripcion, legajoCliente, legajoEmpleado, idVersionProducto, tipoTicket);
+        ticketRequest = new TicketRequest(titulo, descripcion, legajoCliente, legajoEmpleado, idVersionProducto, tipoTicket);
+        ticketRequest.setIdProducto(idProducto);
 
         // Se lo hardcodeo yo mismo! es un Request hardcodeado a manopla! NO LO GENERA SPRINGBOOT.
         ticketRequest.setNumeroTicket(1);
@@ -78,14 +77,15 @@ public class CreacionTest extends SoporteApplicationTest{
         String descripcion = "Problema al querer anotarme con Argerich y Mendez a la vez D:";
         Integer legajoEmpleado = 23456;
         Integer idVersionProducto = 5;
+        Integer idProducto = 2;
         TipoTicket tipoTicket = TipoTicket.CONSULTA;
-        ticketRequest = new Ticket(titulo, descripcion, legajoClienteInexistente, legajoEmpleado, idVersionProducto, tipoTicket);
-
+        ticketRequest = new TicketRequest(titulo, descripcion, legajoClienteInexistente, legajoEmpleado, idVersionProducto, tipoTicket);
+        ticketRequest.setIdProducto(idProducto);
         ticketRequest.setNumeroTicket(1);
     }
 
     @When("^El ingeniero de soporte crea un nuevo ticket con los datos$")
-    public void intentoCrearTicket() {
+    public void intentoCrearTicket() throws ParseException {
         try {
             ticketCreado = ticketService.createTicket(ticketRequest);
         } catch (ClienteInvalidoExcepcion excepcionRecibida) {

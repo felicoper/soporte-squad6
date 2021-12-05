@@ -8,47 +8,44 @@ import com.soporte.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.*;
 
 @Service
 public class ProductoService {
 
     @Autowired
-    private ProductoRepository ticketRepository;
+    private ProductoRepository productoRepository;
 
-    public VersionProducto buscarVersion(Integer idVersionProductoEnRequest) {
+    public VersionProducto buscarVersion(Integer idVersionProductoEnRequest, Integer idProductoEnRequest){
         Collection<Producto> productos = new ArrayList<>();
-        ticketRepository.findAll().forEach(productos::add);
+        productoRepository.findAll().forEach(productos::add);
+
         ////////////////////////////////
-        
-        // TODO: mañana revisar esto!!!!!!!! evitar 2ble For!! 
-        // TODO: buscar la forma de guardar
-       /*
-        for (Producto producto : productos) {
-            for (VersionProducto versionProducto : producto1.getVersiones()) {
-                if (versionProducto.getIdVersionProducto() == idVersionProductoEnRequest) {
-                    return versionProducto;
-                }
+
+        Optional<Producto> unProducto = productoRepository.findById(idProductoEnRequest);
+        if(unProducto.isPresent()) {
+            Producto producto = unProducto.get();
+            VersionProducto versionProducto = producto.getVersionProducto(idVersionProductoEnRequest);
+            if(versionProducto != null) {
+                return versionProducto;
             }
         }
-        */
-   
+        
+        // lanzá  una excepcion
+        throw new RuntimeException("No se encontró la versión del producto");
+
     }
 
-    public void crearProducto(Producto producto) {
-        ticketRepository.save(producto);
+    public void saveDatabase(Producto producto) {
+        productoRepository.save(producto);
     }
-
-
-
-
 
 
     public void agregarVersionProducto(Producto producto, VersionProducto versionProducto) {
-    }
-        /*  Collection<Empleado> empleados = new ArrayList<>();
-        empleadoRepository.findAll().forEach(empleados::add);
-        return empleados;*/
+        producto.agregarVersion(versionProducto);
+        productoRepository.deleteById(producto.getIdProducto());
+        productoRepository.save(producto);
     }
 
 

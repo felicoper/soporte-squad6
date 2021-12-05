@@ -2,11 +2,13 @@ package com.soporte.service;
 
 import com.soporte.Exceptions.ClienteInvalidoExcepcion;
 import com.soporte.model.Ticket;
+import com.soporte.model.TicketRequest;
 import com.soporte.model.VersionProducto;
 import com.soporte.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.*;
 
 @Service
@@ -24,8 +26,9 @@ public class TicketService {
     @Autowired
     private ProductoService productoService;
 
-    public Ticket createTicket(Ticket ticketRequest) throws ClienteInvalidoExcepcion {
-        VersionProducto versionProd = productoService.buscarVersion(ticketRequest.getIdVersionProducto());
+    public Ticket createTicket(TicketRequest ticketRequest) throws ClienteInvalidoExcepcion, ParseException {
+        VersionProducto versionProd = productoService.buscarVersion(ticketRequest.getIdVersionProducto(),
+         ticketRequest.getIdProducto());
 
         if(versionProd != null && clienteExternService.findById(ticketRequest.getIdCliente()) != null
             && empleadoService.findById(ticketRequest.getLegajoEmpleado()) != null){

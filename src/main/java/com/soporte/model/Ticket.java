@@ -2,30 +2,30 @@ package com.soporte.model;
 
 import javax.persistence.*;
 import java.util.Date;
-// | ID | ID_CLIENTE | LEGAJO_PERSONA_ASIGNADA | ID_PRODUCTO | FECHA_CREACION | FECHA_MODIFICACION | ESTADO
+// | ID | ID_CLIENTE | LEGAJO_PERSONA_ASIGNADA |FECHA_CREACION | FECHA_MODIFICACION | ESTADO
 @Entity
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer numeroTicket;
+    protected Integer numeroTicket;
 
-    private String titulo;
+    protected String titulo;
 
-    private String descripcion;
+    protected String descripcion;
     
-    private Integer idCliente;
+    protected Integer idCliente;
 
-    private Integer legajoEmpleado;
+    protected Integer legajoEmpleado;
 
-    private Integer idVersionProducto;
+    protected Integer idVersionProducto;
 
-    private EstadoTicket estadoTicket;
+    protected EstadoTicket estadoTicket;
 
-    private TipoTicket tipoTicket;
+    protected TipoTicket tipoTicket;
 
-    private Date fechaCreacion;
+    protected Date fechaCreacion;
 
-    private Date fechaFinalizacion;
+    protected Date fechaFinalizacion;
 
 
     public Ticket() {

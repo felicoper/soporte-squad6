@@ -1,5 +1,6 @@
 package com.soporte;
 
+import com.soporte.Exceptions.ClienteInvalidoExcepcion;
 import com.soporte.model.Cliente;
 import com.soporte.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.soporte.model.Ticket;
+import com.soporte.model.TicketRequest;
 import com.soporte.service.TicketService;
 
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -48,7 +51,7 @@ public class SoporteApplication {
 	/// TICKETS 
 	@PostMapping("/tickets")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Ticket createTicket(@RequestBody Ticket ticket) {
+	public Ticket createTicket(@RequestBody TicketRequest ticket) throws ClienteInvalidoExcepcion, ParseException {
 		return ticketService.createTicket(ticket);
 	}
 
@@ -92,7 +95,7 @@ public class SoporteApplication {
 		return empleadoService.getEmpleados();
 	}
 
-	@GetMapping("/clientes/{id}")
+	@GetMapping("/empleados/{id}")
 	public Empleado getEmpleadosByID(@PathVariable("id") int id){
         return empleadoService.findById(id);
 	}
