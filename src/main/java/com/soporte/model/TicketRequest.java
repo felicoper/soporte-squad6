@@ -1,31 +1,40 @@
 package com.soporte.model;
 
-import javax.persistence.Entity;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+public class TicketRequest{
+    private String titulo;
+    private String descripcion;
+    private Integer idVersionProducto;
+    private Integer idCliente;
+    private Integer legajoEmpleado;
+    protected TipoTicket tipoTicket;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+    public TicketRequest(){
 
-public class TicketRequest extends Ticket {
-    @NotNull(message = "El id del producto es requerido")
-    private Integer idProducto;
-    
-    public TicketRequest() {
     }
-    public TicketRequest(String titulo, String descripcion, Integer legajoCliente, Integer legajoEmpleado, Integer idVersionProducto, TipoTicket tipoTicket) {
-        super(titulo,  descripcion,  legajoCliente,  legajoEmpleado,  idVersionProducto,  tipoTicket);
+    public TicketRequest (String titulo, String descripcion, Integer idCliente, Integer legajoEmpleado, Integer idVersionProducto, TipoTicket tipoTicket) {
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.idCliente = idCliente;
+        this.legajoEmpleado = legajoEmpleado;
+        this.idVersionProducto = idVersionProducto;
+        this.tipoTicket = tipoTicket;
     }
-    public Integer getIdProducto() {
-        return idProducto;
+    public String getTitulo() {
+        return titulo;
     }
-
-    public void setIdProducto(Integer idProducto) {
-        this.idProducto = idProducto;
+    public String getDescripcion(){
+        return descripcion;
     }
-    public Ticket parseToTicket() {
-        Ticket ticket = new Ticket(this.getTitulo(), this.getDescripcion(), this.getIdCliente(), this.getLegajoEmpleado(), this.getIdVersionProducto(), this.getTipoTicket());
-        ticket.setNumeroTicket(numeroTicket);
-        return ticket;
+    public Integer getIdVersionProducto() {
+        return idVersionProducto;
     }
-    
+    public Integer getIdCliente() {
+        return idCliente;
+    }
+    public Integer getLegajoEmpleado() {
+        return legajoEmpleado;
+    }
+    public TipoTicket getTipoTicket() {
+        return tipoTicket;
+    }
 }

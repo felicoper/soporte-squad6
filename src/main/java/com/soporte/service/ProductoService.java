@@ -7,6 +7,7 @@ import com.soporte.repository.ProductoRepository;
 import com.soporte.repository.TicketRepository;
 import com.soporte.repository.VersionProductoRepository;
 
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,35 +26,37 @@ public class ProductoService {
     @Autowired
     private VersionProductoRepository versionProductoRepository;
 
-    
-    
-    public VersionProducto buscarVersion(Integer idVersionProductoEnRequest, Integer idProductoEnRequest) throws VersionProductoInexistente {
-        Optional<Producto> unProducto = productoRepository.findById(idProductoEnRequest);
-        if(unProducto.isPresent()) {
-            Producto producto = unProducto.get();
-            Optional<VersionProducto> versionProducto = producto.getVersionProducto(idProductoEnRequest);
-            if(versionProducto.isPresent()) {
-                return versionProducto.get();
-            }else{
-                throw new VersionProductoInexistente("No se encontró la version producto");
-            }
-        }else{
-            throw new VersionProductoInexistente("No se encontró el producto");
+    // public VersionProducto buscarVersion(Integer idVersionProductoEnRequest, Integer idProductoEnRequest) throws VersionProductoInexistente {
+    //     Optional<Producto> unProducto = productoRepository.findById(idProductoEnRequest);
+    //     if(unProducto.isPresent()) {
+    //         Producto producto = unProducto.get();
+    //         Optional<VersionProducto> versionProducto = producto.getVersionProducto(idProductoEnRequest);
+    //         if(versionProducto.isPresent()) {
+    //             return versionProducto.get();
+    //         }else{
+    //             throw new VersionProductoInexistente("No se encontró la version producto");
+    //         }
+    //     }else{
+    //         throw new VersionProductoInexistente("No se encontró el producto");
 
-        }
-     }
+    //     }
+    //  }
 
     public void saveDatabase(Producto producto) {
-        producto.getVersionesProducto().forEach(versionProducto -> versionProductoRepository.save(versionProducto));
         productoRepository.save(producto);
     }
 
-    public void agregarVersionProducto(VersionProducto versionProducto) {
-        Producto productoEnBaseDeDatos = productoRepository.findById(versionProducto.getIdProductoAsociado()).get();
-        versionProductoRepository.save(versionProducto);
-        productoEnBaseDeDatos.agregarVersion(versionProducto);
-        productoRepository.save(productoEnBaseDeDatos);
+    public void saveDatabaseVersion(VersionProducto version){
+        versionProductoRepository.save(version);
     }
+
+    // public void agregarVersionProducto(VersionProducto versionProducto, Producto producto) {
+    //     Producto productoEnBaseDeDatos = productoRepository.findById(versionProducto.getProducto().getId()).get();
+    //     versionProducto.setProducto(producto);
+    //     versionProductoRepository.save(versionProducto);
+    //     productoEnBaseDeDatos.agregarVersion(versionProducto);
+    //     productoRepository.save(productoEnBaseDeDatos);
+    // }
 
     public Collection<Producto> getProductos() {
         Collection<Producto> productos = new ArrayList<>();
@@ -65,6 +68,11 @@ public class ProductoService {
         Collection<VersionProducto> versiones = new ArrayList<>();
         versionProductoRepository.findAll().forEach(versiones::add);
         return versiones;
+    }
+
+    public VersionProducto getVersionProducto(Integer id) {
+        VersionProducto version = versionProductoRepository.findById(id).get();
+        return version;
     }
 
 }

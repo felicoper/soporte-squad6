@@ -6,15 +6,15 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 
 import java.util.Date;
 // | ID | ID_CLIENTE | LEGAJO_PERSONA_ASIGNADA |FECHA_CREACION | FECHA_MODIFICACION | ESTADO
 @Entity
+@Table(name = "tickets")
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id")
     protected Integer numeroTicket;
 
     @NotNull(message = "El titulo es requerido")
@@ -22,22 +22,28 @@ public class Ticket {
 
     @NotNull(message = "La descripcion es requerida")
     protected String descripcion;
-    
-    @NotNull(message = "El id cliente es requerido")
-    protected Integer idCliente;
 
-    @NotNull(message = "El legajo del empleado es requerido")
-    protected Integer legajoEmpleado;
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "idCliente", referencedColumnName = "id")
+    @NotNull(message = "El cliente es requerido")
+    protected Cliente cliente;
 
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "idEmpleado", referencedColumnName = "legajo")
+    @NotNull(message = "El empleado es requerido")
+    protected Empleado empleadoAsignado;
+
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "idVersionproducto", referencedColumnName = "idVersionProducto")
     @NotNull(message = "El id de version de producto es requerido")
-    protected Integer idVersionProducto;
+    protected VersionProducto versionProducto;
 
     @NotNull(message = "El estado del ticket es requerido")
     protected EstadoTicket estadoTicket;
 
     @NotNull(message = "El tipo de ticket es requerido")
     protected TipoTicket tipoTicket;
-    
+
     @NotNull(message = "La fecha de creacion es requerida")
     protected Date fechaCreacion;
 
@@ -49,14 +55,11 @@ public class Ticket {
         this.estadoTicket = EstadoTicket.ABIERTO;
     }
 
-    public Ticket(String titulo, String descripcion, Integer legajoCliente, Integer legajoEmpleado, Integer idVersionProducto, TipoTicket tipoTicket) {
+    public Ticket(String titulo, String descripcion, TipoTicket tipoTicket) {
         this.titulo = titulo;
         this.descripcion = descripcion;
-        this.idCliente = legajoCliente;
-        this.legajoEmpleado = legajoEmpleado;
-        this.idVersionProducto = idVersionProducto;
-        this.tipoTicket = tipoTicket;
         this.estadoTicket = EstadoTicket.ABIERTO;
+        this.tipoTicket = tipoTicket;
         this.fechaCreacion = new Date();
     }
 
@@ -72,16 +75,16 @@ public class Ticket {
         return this.descripcion;
     }
 
-    public Integer getIdCliente() {
-        return this.idCliente;
+    public Cliente getCliente() {
+        return this.cliente;
     }
 
-    public Integer getLegajoEmpleado() {
-        return this.legajoEmpleado;
+    public Empleado getEmpleadoAsignado() {
+        return this.empleadoAsignado;
     }
 
-    public Integer getIdVersionProducto() {
-        return this.idVersionProducto;
+    public VersionProducto getVersionProducto() {
+        return this.versionProducto;
     }
 
     public EstadoTicket getEstadoTicket() {
@@ -111,5 +114,15 @@ public class Ticket {
 
     public String setDescripcion(String descripcion) {
         return this.descripcion = descripcion;
+    }
+
+    public void setCliente(Cliente cliente){
+        this.cliente = cliente;
+    }
+    public void setEmpleadoAsignado(Empleado empleado){
+        this.empleadoAsignado = empleado;
+    }
+    public void setVersionProducto(VersionProducto version){
+        this.versionProducto = version;
     }
 }

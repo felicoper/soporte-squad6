@@ -8,8 +8,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,36 +21,42 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 @Entity
 public class VersionProducto {
+
     @Id
-    private Integer id;
-    
-    private Integer idProductoAsociado;
+    private Integer idVersionProducto;
+
     private String versionProducto;
-    private Date fechaLanzamiento;    
+    private Date fechaLanzamiento;
 
-    @NotFound(action = NotFoundAction.IGNORE)
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<Ticket> tickets;
+    @JsonIgnore
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(referencedColumnName = "id")
+    protected Producto producto;
 
-    public VersionProducto(Integer idVersionProducto, Integer idProductoAsociado, String versionProducto, Date fechaLanzamiento) {
-        this.id = idVersionProducto;
-        this.idProductoAsociado = idProductoAsociado;
+    @JsonIgnore
+    @OneToMany(mappedBy = "versionProducto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ticket> tickets  = new ArrayList<>();
+
+    public VersionProducto(Integer idVersionProducto, String versionProducto, Date fechaLanzamiento) {
+        this.idVersionProducto = idVersionProducto;
+        //this.producto = producto;
         this.versionProducto = versionProducto;
         this.fechaLanzamiento = fechaLanzamiento;
-        this.tickets = (Collection<Ticket>) new ArrayList<Ticket>();
     }
 
     public VersionProducto() {
-        this.tickets = (Collection<Ticket>) new ArrayList<Ticket>();
     }
-    
+
     public Date getFechaLanzamiento() {
         return fechaLanzamiento;
     }
@@ -66,19 +74,19 @@ public class VersionProducto {
     }
 
     public void setIdVersionProducto(int idVersionProducto) {
-        this.id = idVersionProducto;
+        this.idVersionProducto = idVersionProducto;
     }
 
-    public Integer getIdVersionProducto() {
-        return this.id;
+    public Integer getId() {
+        return this.idVersionProducto;
     }
 
-    public Integer getIdProductoAsociado() {
-        return this.idProductoAsociado;
+    public Producto getProducto() {
+        return this.producto;
     }
 
-    public void setIdProductoAsociado(Integer idProductoAsociado) {
-        this.idProductoAsociado = idProductoAsociado;
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
 
 }

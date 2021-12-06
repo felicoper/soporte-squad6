@@ -35,11 +35,11 @@ public class ClientService {
     public Cliente findById(Integer idClient) throws ClienteInvalidoExcepcion{
         Optional<Cliente> cliente_externs = this.getClientsExterns().stream().filter(item -> item.getId().equals(idClient)).findFirst();
         Optional<Cliente> cliente_database = this.getClientsDatabase().stream().filter(item -> item.getId().equals(idClient)).findFirst();
-		if(cliente_externs.isPresent()) {
-            return cliente_externs.get();
-        }else if(cliente_database.isPresent()){
+		if(cliente_database.isPresent()) {
             return cliente_database.get();
-        }else{
+        } else if(cliente_externs.isPresent()){
+            return cliente_externs.get();
+        } else {
             throw new ClienteInvalidoExcepcion("El cliente no pertenece a la empresa.");
         }
     }

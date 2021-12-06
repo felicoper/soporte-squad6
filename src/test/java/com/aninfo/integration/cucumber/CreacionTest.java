@@ -43,7 +43,7 @@ public class CreacionTest extends SoporteApplicationTest{
         productService.saveDatabase(producto1);
         productService.agregarVersionProducto(producto1, new VersionProducto(2, "1.0", new SimpleDateFormat("dd/MM/yyyy").parse("09/12/2019")));
         productService.agregarVersionProducto(producto1, new VersionProducto(3, "1.0", new SimpleDateFormat("dd/MM/yyyy").parse("09/12/2020")));
-        
+
         Producto producto2 = new Producto(2, "Linux", new VersionProducto(4, "1.0", new SimpleDateFormat("dd/MM/yyyy").parse("09/12/2018")));
         productService.saveDatabase(producto2);
         productService.agregarVersionProducto(producto2, new VersionProducto(5, "1.1", new SimpleDateFormat("dd/MM/yyyy").parse("09/12/2019")));
@@ -63,10 +63,10 @@ public class CreacionTest extends SoporteApplicationTest{
         Integer idProducto1 = 1;
         TipoTicket tipoTicket = TipoTicket.CONSULTA;
         ticketRequest = new TicketRequest(titulo, descripcion, legajoCliente, legajoEmpleado, idVersionProducto, tipoTicket);
-        ticketRequest.setIdProducto(idProducto1);
+        //ticketRequest.setIdProducto(idProducto1);
 
         // Se lo hardcodeo yo mismo! es un Request hardcodeado a manopla! NO LO GENERA SPRINGBOOT.
-        ticketRequest.setNumeroTicket(1);
+        //ticketRequest.setNumeroTicket(1);
     }
 
     @Given("^Se ingresaron datos para el ticket pero con algun dato obligatorio faltante$")
@@ -77,11 +77,11 @@ public class CreacionTest extends SoporteApplicationTest{
         String descripcion = "Problema al querer anotarme con Argerich y Mendez a la vez D:";
         Integer legajoEmpleado = 23456;
         Integer idVersionProducto = 1;
-        Integer idProducto2 = 1;
+        //Integer idProducto2 = 1;
         TipoTicket tipoTicket = TipoTicket.CONSULTA;
         ticketRequest = new TicketRequest(titulo, descripcion, legajoClienteInexistente, legajoEmpleado, idVersionProducto, tipoTicket);
-        ticketRequest.setIdProducto(idProducto2);
-        ticketRequest.setNumeroTicket(2);
+        //ticketRequest.setIdProducto(idProducto2);
+        //ticketRequest.setNumeroTicket(2);
     }
 
     @When("^El ingeniero de soporte crea un nuevo ticket con los datos$")
@@ -103,13 +103,13 @@ public class CreacionTest extends SoporteApplicationTest{
             //Assert.assertEquals(ticketService.findById(ticketRequest.getNumeroTicket()).get().getIdCliente(), ticketRequest.getIdCliente());
             //Assert.assertEquals(ticketService.findById(ticketRequest.getNumeroTicket()).get().getLegajoEmpleado(), ticketRequest.getLegajoEmpleado());
 
-            ticketService.deleteById(ticketCreado.getNumeroTicket()); 
+            ticketService.deleteById(ticketCreado.getNumeroTicket());
         } else { // "no registrara"
             Assert.assertNull(ticketCreado); // NO se creó!
         }
     }
 
-    
+
     /*@And("Indica un mensaje de exito con identificador y fecha de creacion")
     public void indicarMensajeExitoYOpcionTarea() {
         Assert.assertEquals(ticketCreado.getNumeroTicket(), ticketRequest.getNumeroTicket());

@@ -1,6 +1,5 @@
 package com.soporte.repository;
 
-import com.soporte.model.Producto;
 import com.soporte.model.VersionProducto;
 
 import org.springframework.data.repository.CrudRepository;

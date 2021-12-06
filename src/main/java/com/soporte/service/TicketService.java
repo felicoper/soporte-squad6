@@ -6,7 +6,6 @@ import com.soporte.Exceptions.EmpleadoInvalidoExcepcion;
 import com.soporte.Exceptions.VersionProductoInexistente;
 import com.soporte.model.Cliente;
 import com.soporte.model.Empleado;
-import com.soporte.model.EstadoTicket;
 import com.soporte.model.Ticket;
 import com.soporte.model.TicketRequest;
 import com.soporte.model.VersionProducto;
@@ -14,8 +13,9 @@ import com.soporte.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import java.util.*;
+
+import javax.transaction.Transactional;
 
 @Service
 public class TicketService {
@@ -32,35 +32,45 @@ public class TicketService {
     @Autowired
     private ProductoService productoService;
 
+    @Transactional
     public Ticket createTicket(TicketRequest ticketRequest) throws CamposFaltantesTicketExcepcion, VersionProductoInexistente,ClienteInvalidoExcepcion,EmpleadoInvalidoExcepcion {
         if (ticketRequest == null){
             throw new CamposFaltantesTicketExcepcion("El ticket no puede ser nulo");
         }
-        
+
         if (ticketRequest.getTitulo().isEmpty() || ticketRequest.getDescripcion().isEmpty()) {
             throw new CamposFaltantesTicketExcepcion("Titulo y descripcion son obligatorios");
         }
 
-        if (ticketRequest.getEstadoTicket() == EstadoTicket.CERRADO) {
-            throw new CamposFaltantesTicketExcepcion("No se puede crear ticket cerrado");
+        //hay que usar try catch??
+        VersionProducto versionProd = productoService.getVersionProducto(ticketRequest.getIdVersionProducto());
+        if(versionProd == null){
+            System.out.println("No existe vp");
+            return null;
         }
 
-        if(ticketRequest.getFechaFinalizacion() != null){
-            throw new CamposFaltantesTicketExcepcion("No se puede crear ticket con fecha de finalizacion");
+        Cliente cliente = clienteExternService.findById(ticketRequest.getIdCliente());
+        if(cliente == null){
+            System.out.println("No existe cliente");
+            return null;
         }
 
-        VersionProducto versionProducto = productoService.buscarVersion(ticketRequest.getIdVersionProducto(), ticketRequest.getIdProducto());
-        boolean existe_version_producto = (versionProducto != null);
-        boolean existe_cliente = (clienteExternService.findById(ticketRequest.getIdCliente()) != null);
-        boolean existe_empleado = (empleadoService.findById(ticketRequest.getLegajoEmpleado()) != null);
-
-        if(existe_version_producto && existe_cliente && existe_empleado){
-            Ticket ticketCreado = ticketRequest.parseToTicket();
-            versionProducto.agregarTicket(ticketCreado);
-            ticketRepository.save(ticketCreado);
-            return ticketCreado;
+        Empleado empleado = empleadoService.findById(ticketRequest.getLegajoEmpleado());
+        if(empleado == null){
+            System.out.println("No existe empleado");
+            return null;
         }
-        return null;
+
+        Ticket ticket = new Ticket(ticketRequest.getTitulo(), ticketRequest.getDescripcion(), ticketRequest.getTipoTicket());
+        ticket.setCliente(cliente);
+        ticket.setEmpleadoAsignado(empleado);
+        ticket.setVersionProducto(versionProd);
+
+        ticketRepository.save(ticket);
+        clienteExternService.saveDatabase(cliente);
+        empleadoService.saveDatabase(empleado);
+
+        return ticket;
     }
 
     public Collection<Ticket> getTickets() {
