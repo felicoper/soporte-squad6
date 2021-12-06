@@ -3,52 +3,62 @@ package com.soporte.model;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Optional;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 
 @Entity
 public class Producto {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer idProducto;
+    private Integer id;
 
     private String nombreProducto;
-    private ArrayList<VersionProducto> versionesProducto;
+
+    @NotFound(action = NotFoundAction.IGNORE)
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Collection<VersionProducto> versionesProducto;
     
     public Producto(Integer idProducto, String nombreProducto, VersionProducto versionInicial) {
-        this.idProducto = idProducto;
+        this.id = idProducto;
         this.nombreProducto = nombreProducto;
         this.versionesProducto = new ArrayList<>();
-        this.versionesProducto.add(versionInicial);
+        this.agregarVersion(versionInicial);
+        versionInicial.setIdVersionProducto(idProducto);
     }
-
+    
     public Producto() {
+        this.versionesProducto = new ArrayList<>();
     }
 
-    public Integer getIdProducto() {
-        return this.idProducto;
+    public Integer getId() {
+        return this.id;
     }
 
-    public String getNombre() {
+    public String getNombreProducto() {
         return this.nombreProducto;
     }
 
-    public ArrayList<VersionProducto> getVersiones() {
+    public Collection<VersionProducto> getVersionesProducto() {
+        System.out.println(this.versionesProducto);
         return this.versionesProducto;
     }
 
+  
     public void agregarVersion(VersionProducto versionProducto) {
         this.versionesProducto.add(versionProducto);
     }
 
-	public VersionProducto getVersionProducto(Integer idVersionProductoEnRequest){
+	public Optional<VersionProducto> getVersionProducto(Integer idVersionProductoEnRequest){
 		return versionesProducto
-        .stream()
-        .filter(versionProducto -> versionProducto.getIdVersionProducto().equals(idVersionProductoEnRequest))
-        .findFirst()
-        .get();
+            .stream()
+            .filter(versionProducto -> versionProducto.getIdVersionProducto().equals(idVersionProductoEnRequest))
+            .findFirst();
 	}
 
 

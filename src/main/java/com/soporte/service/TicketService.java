@@ -1,6 +1,12 @@
 package com.soporte.service;
 
+import com.soporte.Exceptions.CamposFaltantesTicketExcepcion;
 import com.soporte.Exceptions.ClienteInvalidoExcepcion;
+import com.soporte.Exceptions.EmpleadoInvalidoExcepcion;
+import com.soporte.Exceptions.VersionProductoInexistente;
+import com.soporte.model.Cliente;
+import com.soporte.model.Empleado;
+import com.soporte.model.EstadoTicket;
 import com.soporte.model.Ticket;
 import com.soporte.model.TicketRequest;
 import com.soporte.model.VersionProducto;
@@ -26,16 +32,35 @@ public class TicketService {
     @Autowired
     private ProductoService productoService;
 
-    public Ticket createTicket(TicketRequest ticketRequest) throws ClienteInvalidoExcepcion, ParseException {
-        VersionProducto versionProd = productoService.buscarVersion(ticketRequest.getIdVersionProducto(),
-         ticketRequest.getIdProducto());
+    public Ticket createTicket(TicketRequest ticketRequest) throws CamposFaltantesTicketExcepcion, VersionProductoInexistente,ClienteInvalidoExcepcion,EmpleadoInvalidoExcepcion {
+        if (ticketRequest == null){
+            throw new CamposFaltantesTicketExcepcion("El ticket no puede ser nulo");
+        }
+        
+        if (ticketRequest.getTitulo().isEmpty() || ticketRequest.getDescripcion().isEmpty()) {
+            throw new CamposFaltantesTicketExcepcion("Titulo y descripcion son obligatorios");
+        }
 
-        if(versionProd != null && clienteExternService.findById(ticketRequest.getIdCliente()) != null
-            && empleadoService.findById(ticketRequest.getLegajoEmpleado()) != null){
-                ticketRepository.save(ticketRequest);
-                versionProd.agregarTicket(ticketRequest);
-            }
-        return ticketRequest;
+        if (ticketRequest.getEstadoTicket() == EstadoTicket.CERRADO) {
+            throw new CamposFaltantesTicketExcepcion("No se puede crear ticket cerrado");
+        }
+
+        if(ticketRequest.getFechaFinalizacion() != null){
+            throw new CamposFaltantesTicketExcepcion("No se puede crear ticket con fecha de finalizacion");
+        }
+
+        VersionProducto versionProducto = productoService.buscarVersion(ticketRequest.getIdVersionProducto(), ticketRequest.getIdProducto());
+        boolean existe_version_producto = (versionProducto != null);
+        boolean existe_cliente = (clienteExternService.findById(ticketRequest.getIdCliente()) != null);
+        boolean existe_empleado = (empleadoService.findById(ticketRequest.getLegajoEmpleado()) != null);
+
+        if(existe_version_producto && existe_cliente && existe_empleado){
+            Ticket ticketCreado = ticketRequest.parseToTicket();
+            versionProducto.agregarTicket(ticketCreado);
+            ticketRepository.save(ticketCreado);
+            return ticketCreado;
+        }
+        return null;
     }
 
     public Collection<Ticket> getTickets() {
