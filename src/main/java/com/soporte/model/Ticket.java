@@ -29,7 +29,7 @@ public class Ticket {
     protected Cliente cliente;
 
     @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "idEmpleado", referencedColumnName = "legajo")
+    @JoinColumn(name = "idEmpleado", referencedColumnName = "id")
     @NotNull(message = "El empleado es requerido")
     protected Empleado empleadoAsignado;
 

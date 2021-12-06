@@ -35,11 +35,11 @@ public class EmpleadoService {
     public Empleado findById(Integer legajo) throws EmpleadoInvalidoExcepcion{
         Optional<Empleado> empleado_externs = this.getEmpleados().stream().filter(item -> item.getId().equals(legajo)).findFirst();
         Optional<Empleado> empleado_database = this.getEmpleadosDatabase().stream().filter(item -> item.getId().equals(legajo)).findFirst();
-        if(empleado_externs.isPresent()){
-            return empleado_externs.get();
-	    }else if(empleado_database.isPresent()){
+        if(empleado_database.isPresent()) {
             return empleado_database.get();
-        }else{
+        } else if(empleado_externs.isPresent()){
+            return empleado_externs.get();
+        } else {
             throw new EmpleadoInvalidoExcepcion("El empleado no pertenece a la empresa.");
         }
     }
@@ -51,7 +51,7 @@ public class EmpleadoService {
     public Collection<Empleado> getEmpleadosDatabase() {
         Collection<Empleado> empleados = new ArrayList<>();
         empleadoRepository.findAll().forEach(empleados::add);
-        
+
         return empleados;
     }
 

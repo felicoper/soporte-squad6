@@ -67,8 +67,22 @@ public class TicketService {
         ticket.setVersionProducto(versionProd);
 
         ticketRepository.save(ticket);
-        clienteExternService.saveDatabase(cliente);
-        empleadoService.saveDatabase(empleado);
+
+        try {
+            empleadoService.saveDatabase(empleado);
+        } catch (Exception EntityExistsException) {
+            System.out.println("El empleado ya existe");
+            //update???
+        }
+
+        try {
+            clienteExternService.saveDatabase(cliente);
+        } catch (Exception EntityExistsException) {
+            System.out.println("El cliente ya existe");
+            //update???
+        }
+
+
 
         return ticket;
     }
