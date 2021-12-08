@@ -74,9 +74,9 @@ public class SoporteApplication {
 
 	////////// https://nullbeans.com/using-put-vs-patch-when-building-a-rest-api-in-spring/
 	@PatchMapping("/tickets/{id_ticket}")
-	public Ticket updateTicket(@RequestBody String toChange, @PathVariable Integer id_ticket) 
+	public TicketRequest updateTicket(@RequestBody TicketRequest ticket, @PathVariable Integer id_ticket) 
 	{
-		return ticketService.updateTicket(toChange, id_ticket);
+		return ticketService.updateTicket(ticket, id_ticket);
 		//return fields;
 	}
 

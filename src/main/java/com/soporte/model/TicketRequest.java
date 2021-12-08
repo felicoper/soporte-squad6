@@ -12,7 +12,6 @@ public class TicketRequest{
     @NotNull(message = "El id cliente es requerido")
     private Integer idCliente;
 
-    @NotNull(message = "El id empleado es requerido")
     private Integer legajoEmpleado;
 
     @NotNull(message = "El id de version de producto es requerido")

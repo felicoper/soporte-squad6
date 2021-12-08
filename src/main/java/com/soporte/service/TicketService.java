@@ -7,7 +7,6 @@ import com.soporte.Exceptions.TicketInexistenteExcepcion;
 import com.soporte.Exceptions.VersionProductoInexistente;
 import com.soporte.model.Cliente;
 import com.soporte.model.Empleado;
-import com.soporte.model.EstadoTicket;
 import com.soporte.model.Ticket;
 import com.soporte.model.TicketRequest;
 import com.soporte.model.VersionProducto;
@@ -68,9 +67,10 @@ public class TicketService {
         ticketRepository.deleteById(id);
     }
 
-    public Ticket updateTicket(String toChange, Integer id_ticket) throws TicketInexistenteExcepcion{
+    public TicketRequest updateTicket(TicketRequest toChange, Integer id_ticket) throws TicketInexistenteExcepcion{
         Ticket ticket = ticketRepository.findById(id_ticket).orElseThrow(() -> new TicketInexistenteExcepcion("No existe el ticket con id " + id_ticket));           
-        // TODO!!! FALTA ESTO
-        return ticket;
+
+
+        return toChange;
     }
 }

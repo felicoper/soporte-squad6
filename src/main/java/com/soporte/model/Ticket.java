@@ -32,7 +32,10 @@ public class Ticket {
     @JoinColumn(name = "idVersionproducto", referencedColumnName = "idVersionProducto")
     private VersionProducto versionProducto;
 
-
+   /*     // TODO!!
+    @OneToMany(mappedBy = "versionProducto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Integer> tareaID  = new ArrayList<>();
+*/
     public Ticket() {
         this.fechaCreacion = new Date();
         this.estadoTicket = EstadoTicket.ABIERTO;
