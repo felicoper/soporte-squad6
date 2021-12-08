@@ -1,6 +1,5 @@
 package com.soporte;
 
-import com.soporte.Exceptions.ClienteInvalidoExcepcion;
 import com.soporte.model.Cliente;
 import com.soporte.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.soporte.model.Ticket;
@@ -18,10 +16,7 @@ import com.soporte.service.TicketService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
@@ -42,7 +37,6 @@ import com.soporte.service.ProductoService;
 @SpringBootApplication
 @EnableSwagger2
 public class SoporteApplication {
-
 	@Autowired
 	private TicketService ticketService;
 
@@ -73,18 +67,18 @@ public class SoporteApplication {
 		return ticketService.getTickets();
 	}
 
+	@GetMapping("/tickets/{id_producto}")
+	public Collection<Ticket> getTicketsOfVersionProduct(@PathVariable Integer id_producto) {
+		return productService.getTicketsOfVersion(id_producto);
+	}
+
 	////////// https://nullbeans.com/using-put-vs-patch-when-building-a-rest-api-in-spring/
-	/*@PatchMapping("/tickets/{id}")
-	public ResponseEntity<Ticket> updateTicket(@RequestBody TicketRequest ticket, @PathVariable Integer id) {
-		Optional<Ticket> ticketOptional = ticketService.findById(id);
-		if (!ticketOptional.isPresent()) {
-			return ResponseEntity.notFound().build();
-		}
-
-		ticketService.save(ticket);
-		return ResponseEntity.noContent().build();
-	}*/
-
+	@PatchMapping("/tickets/{id_ticket}")
+	public Ticket updateTicket(@RequestBody String toChange, @PathVariable Integer id_ticket) 
+	{
+		return ticketService.updateTicket(toChange, id_ticket);
+		//return fields;
+	}
 
 	@DeleteMapping("/tickets/{id}")
 	public void deleteTicket(@PathVariable Integer id) {

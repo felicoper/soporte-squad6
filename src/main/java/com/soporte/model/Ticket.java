@@ -1,66 +1,51 @@
 package com.soporte.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
-
 
 import java.util.Date;
-// | ID | ID_CLIENTE | LEGAJO_PERSONA_ASIGNADA |FECHA_CREACION | FECHA_MODIFICACION | ESTADO
 @Entity
 @Table(name = "tickets")
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
-    protected Integer numeroTicket;
+    private Integer numeroTicket;
 
-    @NotNull(message = "El titulo es requerido")
-    protected String titulo;
+    private String titulo;
+    private String descripcion;
+    private EstadoTicket estadoTicket;
+    private TipoTicket tipoTicket;
+    private Severidad severidadTicket;
 
-    @NotNull(message = "La descripcion es requerida")
-    protected String descripcion;
+    private Date fechaCreacion;
+    private Date fechaFinalizacion;
 
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "idCliente", referencedColumnName = "id")
-    @NotNull(message = "El cliente es requerido")
-    protected Cliente cliente;
+    private Cliente cliente;
 
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "idEmpleado", referencedColumnName = "id")
-    @NotNull(message = "El empleado es requerido")
-    protected Empleado empleadoAsignado;
+    private Empleado empleadoAsignado;
 
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "idVersionproducto", referencedColumnName = "idVersionProducto")
-    @NotNull(message = "El id de version de producto es requerido")
-    protected VersionProducto versionProducto;
-
-    @NotNull(message = "El estado del ticket es requerido")
-    protected EstadoTicket estadoTicket;
-
-    @NotNull(message = "El tipo de ticket es requerido")
-    protected TipoTicket tipoTicket;
-
-    @NotNull(message = "La fecha de creacion es requerida")
-    protected Date fechaCreacion;
-
-    protected Date fechaFinalizacion;
+    private VersionProducto versionProducto;
 
 
     public Ticket() {
         this.fechaCreacion = new Date();
         this.estadoTicket = EstadoTicket.ABIERTO;
+        this.severidadTicket = Severidad.SIN_SEVERIDAD;
     }
 
-    public Ticket(String titulo, String descripcion, TipoTicket tipoTicket) {
+    public Ticket(String titulo, String descripcion, TipoTicket tipoTicket, Severidad severidadTicket) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.estadoTicket = EstadoTicket.ABIERTO;
         this.tipoTicket = tipoTicket;
         this.fechaCreacion = new Date();
+        this.severidadTicket = severidadTicket;
     }
 
     public Integer getNumeroTicket() {
@@ -99,7 +84,6 @@ public class Ticket {
         return this.fechaCreacion;
     }
 
-
     public void setNumeroTicket(Integer numeroTicket) {
         this.numeroTicket = numeroTicket;
     }
@@ -124,5 +108,13 @@ public class Ticket {
     }
     public void setVersionProducto(VersionProducto version){
         this.versionProducto = version;
+    }
+
+    public Severidad getSeveridadTicket() {
+        return this.severidadTicket;
+    }
+
+    public void setSeveridadTicket(Severidad severidadTicket) {
+        this.severidadTicket = severidadTicket;
     }
 }

@@ -1,21 +1,18 @@
 package com.soporte.service;
 
 import com.soporte.Exceptions.VersionProductoInexistente;
+import com.soporte.Exceptions.VersionProductoSinTicketsExcepcion;
 import com.soporte.model.Producto;
+import com.soporte.model.Ticket;
 import com.soporte.model.VersionProducto;
 import com.soporte.repository.ProductoRepository;
-import com.soporte.repository.TicketRepository;
 import com.soporte.repository.VersionProductoRepository;
 
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
-import javax.annotation.PostConstruct;
 
 @Service
 public class ProductoService {
@@ -70,9 +67,24 @@ public class ProductoService {
         return versiones;
     }
 
-    public VersionProducto getVersionProducto(Integer id) {
-        VersionProducto version = versionProductoRepository.findById(id).get();
-        return version;
+    public VersionProducto getVersionProducto(Integer id) throws VersionProductoInexistente{
+        Optional<VersionProducto> version = versionProductoRepository.findById(id);
+        if(version.isPresent()) {
+            return version.get();
+        }else{
+            throw new VersionProductoInexistente("No se encontró la version producto");
+        }
+    }
+
+    public Collection<Ticket> getTicketsOfVersion(Integer id_producto) throws VersionProductoSinTicketsExcepcion{
+        Optional<VersionProducto> version = versionProductoRepository.findById(id_producto);
+        if(version.isPresent()) {
+            if (version.get().getTickets().isEmpty()) 
+                throw new VersionProductoSinTicketsExcepcion("La version de producto no tiene tickets registrados");
+            return version.get().getTickets();
+        }else{
+            throw new VersionProductoSinTicketsExcepcion("No se encontró la version producto existente");
+        }
     }
 
 }

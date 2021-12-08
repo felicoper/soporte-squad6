@@ -44,7 +44,7 @@ public class EmpleadoService {
         }
     }
 
-    public void saveDatabase(Empleado empleado) {
+    public void save(Empleado empleado) {
         empleadoRepository.save(empleado);
     }
 

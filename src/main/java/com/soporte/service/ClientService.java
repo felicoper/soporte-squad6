@@ -44,7 +44,7 @@ public class ClientService {
         }
     }
 
-    public void saveDatabase(Cliente client) {
+    public void save(Cliente client) {
         clientRepository.save(client);
     }
 
