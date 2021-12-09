@@ -1,15 +1,28 @@
 package Steps;
+
 import cucumber.api.java.en.*;
+
+import com.aninfo.integration.cucumber.SoporteApplicationTest;
+
 import org.junit.jupiter.api.Assertions;
 
+public class PasosCierreTicket extends SoporteApplicationTest {
 
-public class PasosCierreTicket {
+    @Given("ticket existente con estado \"([^\"]*)\"")
+    public void ticketExistenteConEstado(String estadoActual) {
+
+    }
+
+    @When("el ingeniero de soporte cierre el ticket")
+    public void cierreTicket() {
+
+    }
 
     @Then("^el sistema registra que se cerro el ticket y notifica que se cerro exitosamente$")
-    public void el_sistema_registra_que_se_cerro_el_ticket_y_notifica_que_se_cerro_exitosamente(){
+    public void registraCierreTicketYNotifica() {
     }
 
     @Then("^el sistema indica que el ticket ya se encuentra cerrado$")
-    public void el_sistema_indica_que_el_ticket_ya_se_encuentra_cerrado() {
+    public void indicaQueElTicketEstaCerrado() {
     }
 }

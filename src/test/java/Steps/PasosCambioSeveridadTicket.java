@@ -1,4 +1,5 @@
 package Steps;
+
 import com.soporte.model.Severidad;
 import com.soporte.model.Ticket;
 import cucumber.api.java.en.*;
@@ -7,32 +8,33 @@ import org.junit.jupiter.api.Assertions;
 public class PasosCambioSeveridadTicket {
     Ticket ticket;
 
-    @When("^el ingeniero de soporte cierre el ticket$")
-    public void el_ingeniero_de_soporte_cierre_el_ticket(){
-       // ticket =  new ticket();
-        //ticket.cambiarEstado(Estado.CERRADO);
+    @Given("^ticket existente con estado \"([^\"]*)\"$")
+    public void ticketExistenteConEstado(String estadoActual) {
+        // algo...
     }
 
     @Then("^indica que se cerro exitosamente$")
-    public void indica_que_se_cerro_exitosamente(){
-
+    public void indica_que_se_cerro_exitosamente() {
+        // algo...
     }
 
     @When("^el ingeniero de soporte cambie la severidad del ticket$")
-    public void el_ingeniero_de_soporte_cambie_la_severidad_del_ticket() {
-       // ticket =  new ticket();
-       // ticket.cambiarSeveridad(Severidad.S1);
+    public void cambioSeveridadTicket() {
+        // algo...
     }
 
     @Then("^el sistema indica que no se puede cambiar la severidad del ticket$")
-    public void el_sistema_indica_que_no_se_puede_cambiar_la_severidad_del_ticket() {
-
+    public void indicaQueNoSePuedeCambiarLaSeveridadTicket() {
+        // algo...
     }
+
     @Then("^el sistema registra el cambio de la severidad del ticket$")
-    public void el_sistema_registra_el_cambio_de_la_severidad_del_ticket(){
+    public void registroCambioDeSeveridadTicket() {
+        // algo...
     }
 
-    @Then("^indica que se cambio la severidad exitosamente$")
+    @Then("^indica que se cambio la severidad exitosamente$") // este AND deberia ir??
     public void indica_que_se_cambio_la_severidad_exitosamente() {
+        // algo...
     }
 }
