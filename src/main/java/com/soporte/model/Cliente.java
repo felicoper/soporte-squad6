@@ -20,8 +20,9 @@ public class Cliente {
     @GeneratedValue
     private Integer id;
 
+    // OJO QUE ES ID DE UNA COLUMNA
     @JsonProperty("id")
-    private Integer idCliente;
+    private Integer idClienteExtern;
 
     @JsonProperty("razon social")
     private String razon_social;
@@ -34,7 +35,7 @@ public class Cliente {
     private List<Ticket> tickets = new ArrayList<>();
 
     public Cliente(Integer id, String razon_social, String cuit) {
-        this.idCliente = id;
+        this.idClienteExtern = id;
         this.razon_social = razon_social;
         this.CUIT = cuit;
     }
@@ -43,7 +44,9 @@ public class Cliente {
 
     }
 
+
+    // OJO QUE ES ID DE UNA COLUMNA, NO ES EL ID (PRIMARY KEY) PROPIO DE LA DATABASE
     public Integer getId() {
-        return this.idCliente;
+        return this.idClienteExtern;
     }
 }
