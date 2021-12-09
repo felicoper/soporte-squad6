@@ -1,25 +1,17 @@
 package com.soporte;
 
-import com.soporte.model.Cliente;
-import com.soporte.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.soporte.model.Ticket;
-import com.soporte.model.TicketRequest;
 import com.soporte.model.VersionProducto;
-import com.soporte.service.TicketService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 
 import javax.annotation.PostConstruct;
-import javax.validation.Valid;
 
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -27,9 +19,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import com.soporte.model.Empleado;
 import com.soporte.model.Producto;
-import com.soporte.service.EmpleadoService;
 import com.soporte.service.ProductoService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -37,89 +27,12 @@ import com.soporte.service.ProductoService;
 @SpringBootApplication
 @EnableSwagger2
 public class SoporteApplication {
-	@Autowired
-	private TicketService ticketService;
-
-	@Autowired
-	private ClientService clienteExternService;
-
-	@Autowired
-	private EmpleadoService empleadoService;
-
 
 	@Autowired
 	private ProductoService productService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SoporteApplication.class, args);
-	}
-
-
-	/// TICKETS
-	@PostMapping("/tickets")
-	@ResponseStatus(HttpStatus.CREATED)
-	public Ticket createTicket(@Valid @RequestBody TicketRequest ticket) {
-		return ticketService.createTicket(ticket);
-	}
-
-	@GetMapping("/tickets")
-	public Collection<Ticket> getTickets() {
-		return ticketService.getTickets();
-	}
-
-	@GetMapping("/tickets/{id_producto}")
-	public Collection<Ticket> getTicketsOfVersionProduct(@PathVariable Integer id_producto) {
-		return productService.getTicketsOfVersion(id_producto);
-	}
-
-	////////// https://nullbeans.com/using-put-vs-patch-when-building-a-rest-api-in-spring/
-	@PatchMapping("/tickets/{id_ticket}")
-	public Ticket updateTicket(@RequestBody String toChange, @PathVariable Integer id_ticket) 
-	{
-		return ticketService.updateTicket(toChange, id_ticket);
-		//return fields;
-	}
-
-	@DeleteMapping("/tickets/{id}")
-	public void deleteTicket(@PathVariable Integer id) {
-		ticketService.deleteById(id);
-	}
-
-	/// CLIENTES
-
-	@GetMapping("/clientes")
-	public Collection<Cliente> getClientes(){
-		return clienteExternService.getClientsExterns();
-	}
-
-	@GetMapping("/clientes/{id}")
-	public Cliente getClientByID(@PathVariable("id") int id){
-        return clienteExternService.findById(id);
-	}
-
-	/// EMPLEADOS
-
-	@GetMapping("/empleados")
-	public Collection<Empleado> getEmpleados(){
-		return empleadoService.getEmpleados();
-	}
-
-	@GetMapping("/empleados/{id}")
-	public Empleado getEmpleadosByID(@PathVariable("id") int id){
-        return empleadoService.findById(id);
-	}
-
-
-	/// PRODUCOS Y VERSIONES PRODUCTOS
-
-	@GetMapping("/productos")
-	public Collection<Producto> getProducto(){
-		return productService.getProductos();
-	}
-
-	@GetMapping("/versiones-productos")
-	public Collection<VersionProducto> getVersionesProducto(){
-		return productService.getVersionesProductos();
 	}
 
 	@PostConstruct

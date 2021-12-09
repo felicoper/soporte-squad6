@@ -117,4 +117,16 @@ public class Ticket {
     public void setSeveridadTicket(Severidad severidadTicket) {
         this.severidadTicket = severidadTicket;
     }
+
+    public void setTipoTicket(TipoTicket tipoTicket) {
+        this.tipoTicket = tipoTicket;
+    }
+
+    public void setEstadoTicket(EstadoTicket estado) {
+        this.estadoTicket = estado;
+    }
+
+    public void finalizarTicket(){
+        this.fechaFinalizacion = new Date();
+    }
 }

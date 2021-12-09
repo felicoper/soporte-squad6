@@ -19,7 +19,7 @@ public class TicketRequest{
     private Integer idVersionProducto;
 
     @NotNull(message = "La severidad del ticket es requerido")
-    private Severidad serveridadTicket;
+    private Severidad severidadTicket;
 
     @NotNull(message = "El tipo de ticket es requerido")
     private TipoTicket tipoTicket;
@@ -27,14 +27,14 @@ public class TicketRequest{
     public TicketRequest(){
 
     }
-    public TicketRequest (String titulo, String descripcion, Integer idCliente, Integer legajoEmpleado, Integer idVersionProducto, TipoTicket tipoTicket, Severidad serveridadTicket) {
+    public TicketRequest (String titulo, String descripcion, Integer idCliente, Integer legajoEmpleado, Integer idVersionProducto, TipoTicket tipoTicket, Severidad severidadTicket) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.idCliente = idCliente;
         this.legajoEmpleado = legajoEmpleado;
         this.idVersionProducto = idVersionProducto;
         this.tipoTicket = tipoTicket;
-        this.serveridadTicket = serveridadTicket;
+        this.severidadTicket = severidadTicket;
     }
     public String getTitulo() {
         return titulo;
@@ -54,7 +54,7 @@ public class TicketRequest{
     public TipoTicket getTipoTicket() {
         return tipoTicket;
     }
-    public Severidad getServeridadTicket() {
-        return serveridadTicket;
+    public Severidad getSeveridadTicket() {
+        return severidadTicket;
     }
 }
