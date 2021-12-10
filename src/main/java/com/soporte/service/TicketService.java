@@ -44,14 +44,10 @@ public class TicketService {
         Cliente cliente = clienteExternService.findById(ticketRequest.getIdCliente());
         Empleado empleado = empleadoService.findById(ticketRequest.getLegajoEmpleado());
 
-        Ticket ticketCreado = new Ticket(ticketRequest.getTitulo(), ticketRequest.getDescripcion(), ticketRequest.getTipoTicket(), ticketRequest.getSeveridadTicket());
-        ticketCreado.setCliente(cliente);
-        ticketCreado.setEmpleadoAsignado(empleado);
-        ticketCreado.setVersionProducto(versionProducto);
+        Ticket ticketCreado = new Ticket(ticketRequest.getTitulo(), ticketRequest.getDescripcion(), ticketRequest.getIdCliente(), ticketRequest.getLegajoEmpleado(), ticketRequest.getTipoTicket(), ticketRequest.getSeveridadTicket());
 
+        ticketCreado.setVersionProducto(versionProducto);
         ticketRepository.save(ticketCreado);
-        empleadoService.save(empleado); // Guardo SOLO el asociado al ticket! Si existe, se updatea solo :'D
-        clienteExternService.save(cliente); // Guardo SOLO el asociado al ticket! Si existe, se updatea solo :'D
 
         return ticketCreado;
     }
@@ -67,12 +63,15 @@ public class TicketService {
         ticketRepository.save(ticket);
     }
 
-    public void deleteById(Integer id) {
-        ticketRepository.deleteById(id);
+    public Ticket getTicketById( Integer id_ticket) throws TicketInexistenteExcepcion {
+        Ticket ticket = ticketRepository.findById(id_ticket).orElseThrow(() -> new TicketInexistenteExcepcion("No existe el ticket con id " + id_ticket));
+        return ticket;
     }
 
-    public Ticket updateTicket(Integer id_ticket, Map<String, Object> changes) throws TicketInexistenteExcepcion,VersionProductoInexistente,ClienteInvalidoExcepcion,EmpleadoInvalidoExcepcion{
+    public Ticket updateTicket(Integer id_ticket, Map<String, Object> changes) throws TicketInexistenteExcepcion,VersionProductoInexistente,ClienteInvalidoExcepcion,EmpleadoInvalidoExcepcion, CambioEstadoTicketCerradoExcepcion{
         Ticket ticket = ticketRepository.findById(id_ticket).orElseThrow(() -> new TicketInexistenteExcepcion("No existe el ticket con id " + id_ticket));
+
+        if(ticket.getEstadoTicket() == EstadoTicket.CERRADO) throw new CambioEstadoTicketCerradoExcepcion("El ticket ya está cerrado");
 
         changes.forEach( (change, value) -> {
             switch (change) {
@@ -88,14 +87,12 @@ public class TicketService {
                 }
                 case "idCliente": {
                     Cliente cliente = clienteExternService.findById((Integer) value);
-                    ticket.setCliente(cliente);
-                    clienteExternService.save(cliente);
+                    ticket.setIdCliente((Integer) value);
                     break;
                 }
-                case "empleadoAsignado": {
+                case "legajoEmpleado": {
                     Empleado empleado = empleadoService.findById((Integer) value);
-                    ticket.setEmpleadoAsignado(empleado);
-                    empleadoService.save(empleado);
+                    ticket.setLegajoEmpleado((Integer) value);
                     break;
                 }
             }
@@ -105,9 +102,11 @@ public class TicketService {
         return ticket;
     }
 
-    private void cambioEstadoTicket(Ticket ticket, EstadoTicket estado) throws CambioEstadoTicketCerradoExcepcion {
-        if(ticket.getEstadoTicket() == EstadoTicket.CERRADO) throw new CambioEstadoTicketCerradoExcepcion("El ticket ya está cerrado");
+    public void deleteById(Integer id) {
+        ticketRepository.deleteById(id);
+    }
 
+    private void cambioEstadoTicket(Ticket ticket, EstadoTicket estado) {
         ticket.setEstadoTicket(estado);
         if (estado == EstadoTicket.CERRADO) ticket.finalizarTicket();
 

@@ -28,17 +28,6 @@ public class CreacionTest extends SoporteApplicationTest{
     @Before
     public void setup() throws ParseException {
         System.out.println("Before any test execution");
-        clientExternService.save(new Cliente(100, "FIUBA", "20123456786"));
-        clientExternService.save(new Cliente(101, "USAL", "20123456783"));
-        clientExternService.save(new Cliente(102, "UNPAZ", "20123456784"));
-        clientExternService.save(new Cliente(103, "SA", "20123456780"));
-        clientExternService.save(new Cliente(104, "SE", "20123456781"));
-
-        empleadoService.save(new Empleado(100898, "Fernando", "Bursztyn"));
-        empleadoService.save(new Empleado(23456, "Federico", "noseElApellido"));
-        empleadoService.save(new Empleado(112233, "Martin", "Carlos"));
-        empleadoService.save(new Empleado(445566, "Felipe", "Copertini"));
-        empleadoService.save(new Empleado(778899, "Mateo", "Bulnes"));
 
         Producto producto1 = new Producto(1, "SIU Guarani");
         Producto producto2 = new Producto(2, "Linux");
@@ -125,7 +114,7 @@ public class CreacionTest extends SoporteApplicationTest{
     public void solicitará_que_ingrese_los_datos_de_existente_en_la_empresa(String arg1){
         Assert.assertTrue(true);
     }
-    
+
     @Given("^Los datos obligatorios ingresados para un nuevo ticket pero con el \"([^\"]*)\" menor a cero$")
     public void los_datos_obligatorios_ingresados_para_un_nuevo_ticket_pero_con_el_menor_a_cero(String arg1){
         Assert.assertTrue(true);

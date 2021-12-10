@@ -41,7 +41,12 @@ public class TicketController {
 		return ticketService.getTickets();
 	}
 
-	@GetMapping("/tickets/{id_producto}")
+	@GetMapping("/tickets/{id_ticket}")
+	public Ticket getTicketById(@PathVariable Integer id_ticket) {
+		return ticketService.getTicketById(id_ticket);
+	}
+
+	@GetMapping("/tickets/producto/{id_producto}")
 	public Collection<Ticket> getTicketsOfVersionProduct(@PathVariable Integer id_producto) {
 		return productService.getTicketsOfVersion(id_producto);
 	}

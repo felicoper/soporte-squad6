@@ -34,17 +34,6 @@ public class PasosCambioEstado extends SoporteApplicationTest {
     @Before
     public void setup() throws ParseException {
         System.out.println("Before any test execution");
-        clientExternService.save(new Cliente(100, "FIUBA", "20123456786"));
-        clientExternService.save(new Cliente(101, "USAL", "20123456783"));
-        clientExternService.save(new Cliente(102, "UNPAZ", "20123456784"));
-        clientExternService.save(new Cliente(103, "SA", "20123456780"));
-        clientExternService.save(new Cliente(104, "SE", "20123456781"));
-
-        empleadoService.save(new Empleado(100898, "Fernando", "Bursztyn"));
-        empleadoService.save(new Empleado(23456, "Federico", "noseElApellido"));
-        empleadoService.save(new Empleado(112233, "Martin", "Carlos"));
-        empleadoService.save(new Empleado(445566, "Felipe", "Copertini"));
-        empleadoService.save(new Empleado(778899, "Mateo", "Bulnes"));
 
         Producto producto1 = new Producto(1, "SIU Guarani");
         Producto producto2 = new Producto(2, "Linux");
@@ -95,8 +84,8 @@ public class PasosCambioEstado extends SoporteApplicationTest {
 
     @When("^el ingeniero de soporte cambie el ticket al nuevo estado \"([^\"]*)\"$")
     public void cambioEstadoANuevoEstadoNoCerrado(String nuevoEstado) {
-        ticketService.updateTicket(ticketCreado.getNumeroTicket(), /*aca iria un Map*/); //cambia a nuevoEstado
-            
+        //ticketService.updateTicket(ticketCreado.getNumeroTicket(), /*aca iria un Map*/); //cambia a nuevoEstado
+
     }
 
     @When("^el ingeniero de soporte intente cambiar el estado del ticket$")

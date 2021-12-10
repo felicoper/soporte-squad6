@@ -20,13 +20,9 @@ public class Ticket {
     private Date fechaCreacion;
     private Date fechaFinalizacion;
 
-    @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "idCliente", referencedColumnName = "id")
-    private Cliente cliente;
-
-    @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "idEmpleado", referencedColumnName = "id")
-    private Empleado empleadoAsignado;
+    //Referencias a los ids
+    private Integer idCliente;
+    private Integer legajoEmpleado;
 
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "idVersionproducto", referencedColumnName = "idVersionProducto")
@@ -42,9 +38,11 @@ public class Ticket {
         this.severidadTicket = Severidad.SIN_SEVERIDAD;
     }
 
-    public Ticket(String titulo, String descripcion, TipoTicket tipoTicket, Severidad severidadTicket) {
+    public Ticket(String titulo, String descripcion, Integer idCliente, Integer legajoEmpleado, TipoTicket tipoTicket, Severidad severidadTicket) {
         this.titulo = titulo;
         this.descripcion = descripcion;
+        this.idCliente = idCliente;
+        this.legajoEmpleado = legajoEmpleado;
         this.estadoTicket = EstadoTicket.ABIERTO;
         this.tipoTicket = tipoTicket;
         this.fechaCreacion = new Date();
@@ -63,12 +61,12 @@ public class Ticket {
         return this.descripcion;
     }
 
-    public Cliente getCliente() {
-        return this.cliente;
+    public Integer getIdCliente() {
+        return this.idCliente;
     }
 
-    public Empleado getEmpleadoAsignado() {
-        return this.empleadoAsignado;
+    public Integer getLegajoEmpleado() {
+        return this.legajoEmpleado;
     }
 
     public VersionProducto getVersionProducto() {
@@ -103,11 +101,11 @@ public class Ticket {
         return this.descripcion = descripcion;
     }
 
-    public void setCliente(Cliente cliente){
-        this.cliente = cliente;
+    public void setIdCliente(Integer idCliente){
+        this.idCliente = idCliente;
     }
-    public void setEmpleadoAsignado(Empleado empleado){
-        this.empleadoAsignado = empleado;
+    public void setLegajoEmpleado(Integer legajoEmpleado){
+        this.legajoEmpleado = legajoEmpleado;
     }
     public void setVersionProducto(VersionProducto version){
         this.versionProducto = version;
