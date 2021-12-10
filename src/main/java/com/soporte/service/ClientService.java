@@ -28,6 +28,9 @@ public class ClientService {
     }
 
     public Cliente findById(Integer idClient) throws ClienteInvalidoExcepcion{
+        if (idClient < 0) {
+            throw new ClienteInvalidoExcepcion("El id del cliente no puede ser negativo");
+        }
         Optional<Cliente> cliente_externs = this.getClientsExterns().stream().filter(item -> item.getId().equals(idClient)).findFirst();
 
         if(cliente_externs.isPresent()){

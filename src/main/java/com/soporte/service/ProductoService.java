@@ -68,6 +68,10 @@ public class ProductoService {
     }
 
     public VersionProducto getVersionProducto(Integer id) throws VersionProductoInexistente{
+        if (id < 0){
+            throw new VersionProductoInexistente("El id de la version de producto no puede ser negativo");
+        }
+
         Optional<VersionProducto> version = versionProductoRepository.findById(id);
         if(version.isPresent()) {
             return version.get();

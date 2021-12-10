@@ -40,11 +40,11 @@ public class TicketService {
 
     @Transactional
     public Ticket createTicket(@Valid TicketRequest ticketRequest) throws CamposFaltantesTicketExcepcion, VersionProductoInexistente,ClienteInvalidoExcepcion,EmpleadoInvalidoExcepcion {
-        VersionProducto versionProducto = productoService.getVersionProducto(ticketRequest.getIdVersionProducto());
         Cliente cliente = clienteExternService.findById(ticketRequest.getIdCliente());
         Empleado empleado = empleadoService.findById(ticketRequest.getLegajoEmpleado());
+        VersionProducto versionProducto = productoService.getVersionProducto(ticketRequest.getIdVersionProducto());
 
-        Ticket ticketCreado = new Ticket(ticketRequest.getTitulo(), ticketRequest.getDescripcion(), ticketRequest.getIdCliente(), ticketRequest.getLegajoEmpleado(), ticketRequest.getTipoTicket(), ticketRequest.getSeveridadTicket());
+        Ticket ticketCreado = new Ticket(ticketRequest.getTitulo(), ticketRequest.getDescripcion(), cliente.getId(), empleado.getId(), ticketRequest.getTipoTicket(), ticketRequest.getSeveridadTicket());
 
         ticketCreado.setVersionProducto(versionProducto);
         ticketRepository.save(ticketCreado);
@@ -86,13 +86,11 @@ public class TicketService {
                     break;
                 }
                 case "idCliente": {
-                    Cliente cliente = clienteExternService.findById((Integer) value);
-                    ticket.setIdCliente((Integer) value);
+                    if(clienteExternService.findById((Integer) value) != null); ticket.setIdCliente((Integer) value);
                     break;
                 }
                 case "legajoEmpleado": {
-                    Empleado empleado = empleadoService.findById((Integer) value);
-                    ticket.setLegajoEmpleado((Integer) value);
+                    if (empleadoService.findById((Integer) value) != null); ticket.setLegajoEmpleado((Integer) value);
                     break;
                 }
             }

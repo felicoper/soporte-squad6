@@ -1,9 +1,7 @@
 package Steps;
 
-import com.soporte.model.Severidad;
 import com.soporte.model.Ticket;
 import cucumber.api.java.en.*;
-import org.junit.jupiter.api.Assertions;
 
 public class PasosCambioSeveridadTicket {
     Ticket ticket;

@@ -1,16 +1,14 @@
 package com.aninfo.integration.cucumber;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Random;
 
-import com.soporte.Exceptions.ClienteInvalidoExcepcion;
 import com.soporte.model.Cliente;
-import com.soporte.model.Producto;
 import com.soporte.model.Severidad;
 import com.soporte.model.Ticket;
 import com.soporte.model.TicketRequest;
 import com.soporte.model.TipoTicket;
-import com.soporte.model.VersionProducto;
 import com.soporte.model.Empleado;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -24,61 +22,62 @@ public class CreacionTest extends SoporteApplicationTest{
     TicketRequest ticketRequest;
     Ticket ticketCreado;
     RuntimeException excepcionRecibida;
+    ArrayList<Integer> clientes_validos = new ArrayList<Integer>();
+    ArrayList<Integer> empleados_validos = new ArrayList<Integer>();
 
     @Before
     public void setup() throws ParseException {
-        System.out.println("Before any test execution");
+       System.out.println("Before any test execution");
 
-        Producto producto1 = new Producto(1, "SIU Guarani");
-        Producto producto2 = new Producto(2, "Linux");
-        productService.saveDatabase(producto1);
-        productService.saveDatabase(producto2);
-		VersionProducto versionProducto1 = new VersionProducto(1, "0.99b", new SimpleDateFormat("dd/MM/yyyy").parse("09/12/2018"));
-		VersionProducto versionProducto2 = new VersionProducto(2, "3.0", new SimpleDateFormat("dd/MM/yyyy").parse("09/12/2018"));
-        VersionProducto versionProducto3 = new VersionProducto(3, "1.0", new SimpleDateFormat("dd/MM/yyyy").parse("09/12/2019"));
-        VersionProducto versionProducto4 = new VersionProducto(4, "2.0", new SimpleDateFormat("dd/MM/yyyy").parse("09/12/2020"));
-        VersionProducto versionProducto5 = new VersionProducto(5, "4.1", new SimpleDateFormat("dd/MM/yyyy").parse("09/12/2019"));
-        VersionProducto versionProducto6 = new VersionProducto(6, "5.2", new SimpleDateFormat("dd/MM/yyyy").parse("09/12/2020"));
+       this.clientes_validos = clientExternService.getClientsExterns().stream().map(Cliente::getId).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+       this.empleados_validos = empleadoService.getEmpleados().stream().map(Empleado::getId).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+    }
 
-		versionProducto1.setProducto(producto1);
-		versionProducto2.setProducto(producto2);
-		versionProducto3.setProducto(producto1);
-		versionProducto4.setProducto(producto1);
-		versionProducto5.setProducto(producto2);
-		versionProducto6.setProducto(producto2);
+    private Integer obtenerLegajoEmpleadoInexistente() {
+        int i = clientes_validos.size();
+        while (i > 0) {
+            i++;
+            if (!empleados_validos.contains(i)) {
+                return i;
+            }
+        }
+        return null;
+    }
 
-		productService.saveDatabaseVersion(versionProducto1);
-		productService.saveDatabaseVersion(versionProducto2);
-		productService.saveDatabaseVersion(versionProducto3);
-		productService.saveDatabaseVersion(versionProducto4);
-		productService.saveDatabaseVersion(versionProducto5);
-		productService.saveDatabaseVersion(versionProducto6);
-
+    private Integer obtenerLegajoClienteInexistente() {
+        int i = clientes_validos.size();
+        while (i > 0) {
+            i++;
+            if (!clientes_validos.contains(i)) {
+                return i;
+            }
+        }
+        return null;
     }
 
     @Given("^Los datos validos y obligatorios ingresados para un nuevo ticket$")
     public void datosValidosYObligatoriosIngresadosParaNuevoTicket() {
         String titulo = "Problema con SIU";
-        String descripcion = "Problema al querer anotarme con Argerich y Mendez a la vez D:";
-        Integer legajoCliente = 100;
-        Integer legajoEmpleado = 23456;
-        Integer idVersionProducto = 1;
+        String descripcion = "Problema al querer anotarme D:";
+        Integer legajoClienteValido = 1 + new Random().nextInt(clientes_validos.size() - 1);
+        Integer legajoEmpleadoValido = 1 + new Random().nextInt(empleados_validos.size() - 1);
+        Integer idVersionProductoValido = 1 +  new Random().nextInt(productService.getVersionesProductos().size() - 1);
         TipoTicket tipoTicket = TipoTicket.CONSULTA;
         Severidad severidadTicket = Severidad.S1;
-        ticketRequest = new TicketRequest(titulo, descripcion, legajoCliente, legajoEmpleado, idVersionProducto, tipoTicket, severidadTicket);
+        ticketRequest = new TicketRequest(titulo, descripcion, legajoClienteValido, legajoEmpleadoValido, idVersionProductoValido, tipoTicket, severidadTicket);
     }
 
     @Given("^Se ingresaron datos para el ticket pero con algun campo obligatorio faltante$")
     public void datosConAlgunCampoObligatorioFaltante() {
-        Integer legajoClienteInexistente = null;
+        Integer legajoClienteInexistente = this.obtenerLegajoClienteInexistente();
 
         String titulo = "Problema con SIU";
-        String descripcion = "Problema al querer anotarme con Argerich y Mendez a la vez D:";
-        Integer legajoEmpleado = 23456;
-        Integer idVersionProducto = 1;
+        String descripcion = "Problema al querer anotarme D:";
+        Integer legajoEmpleadoValido = 1 + new Random().nextInt(empleados_validos.size() - 1);
+        Integer idVersionProductoValido = 1 +  new Random().nextInt(productService.getVersionesProductos().size() - 1);
         TipoTicket tipoTicket = TipoTicket.CONSULTA;
         Severidad severidadTicket = Severidad.S1;
-        ticketRequest = new TicketRequest(titulo, descripcion, legajoClienteInexistente, legajoEmpleado, idVersionProducto, tipoTicket, severidadTicket);
+        ticketRequest = new TicketRequest(titulo, descripcion, legajoClienteInexistente, legajoEmpleadoValido, idVersionProductoValido, tipoTicket, severidadTicket);
     }
 
     @When("^El ingeniero de soporte crea un nuevo ticket con los datos$")
@@ -94,7 +93,7 @@ public class CreacionTest extends SoporteApplicationTest{
     public void registroTicket(String registraONo) {
         if (registraONo.equals("registrara")) {
             Assert.assertNotNull(ticketCreado); // Se creó perfecto!
-            ticketService.deleteById(ticketCreado.getNumeroTicket()); // lo borro..
+            ticketService.deleteById(ticketCreado.getNumeroTicket()); // lo borro despues de crear!..
         } else { // "no registrara"
             Assert.assertNull(ticketCreado); // NO se creó!
         }
@@ -106,30 +105,117 @@ public class CreacionTest extends SoporteApplicationTest{
     }
 
     @Given("^Los datos obligatorios ingresados para un nuevo ticket pero con \"([^\"]*)\" en la empresa$")
-    public void los_datos_obligatorios_ingresados_para_un_nuevo_ticket_pero_con_en_la_empresa(String arg1) {
-        Assert.assertTrue(true);
+    public void los_datos_obligatorios_ingresados_para_un_nuevo_ticket_pero_con_en_la_empresa(String arg) {
+        String titulo = "Problema con SIU";
+        String descripcion = "Problema al querer anotarme con Argerich y Mendez a la vez D:";
+        Integer legajoCliente = 0;
+        Integer legajoEmpleado = 0;
+        Integer idVersionProducto = 0;
+        TipoTicket tipoTicket = TipoTicket.CONSULTA;
+        Severidad severidadTicket = Severidad.S1;
+
+        switch (arg) {
+            case "información de cliente inexistente": {
+                legajoCliente = this.obtenerLegajoClienteInexistente();
+                legajoEmpleado = 1 + new Random().nextInt(empleados_validos.size() - 1);
+                idVersionProducto = 1 +  new Random().nextInt(productService.getVersionesProductos().size() - 1);
+                break;
+            }
+            case "una persona asignada inexistente": {
+                legajoCliente = 1 + new Random().nextInt(clientes_validos.size() - 1);
+                legajoEmpleado = this.obtenerLegajoEmpleadoInexistente();
+                idVersionProducto = 1 +  new Random().nextInt(productService.getVersionesProductos().size() - 1);
+                break;
+            }
+            case "un producto inexistente": {
+                legajoCliente = 1 + new Random().nextInt(clientes_validos.size() - 1);
+                legajoEmpleado = 1 + new Random().nextInt(empleados_validos.size() - 1);
+                idVersionProducto = 100;
+                break;
+            }
+            default:
+                Assert.fail("No se esperaba esta excepción");
+        }
+        ticketRequest = new TicketRequest(titulo, descripcion, legajoCliente, legajoEmpleado, idVersionProducto, tipoTicket, severidadTicket);
     }
 
     @And("^Solicitará que ingrese los datos de \"([^\"]*)\" existente en la empresa\\.$")
-    public void solicitará_que_ingrese_los_datos_de_existente_en_la_empresa(String arg1){
-        Assert.assertTrue(true);
+    public void solicitará_que_ingrese_los_datos_de_existente_en_la_empresa(String arg){
+        switch (arg) {
+            case "un cliente": {
+                Assert.assertEquals("El cliente no pertenece a la empresa.", this.excepcionRecibida.getMessage());
+                break;
+            }
+            case "una persona": {
+                Assert.assertEquals("El empleado no pertenece a la empresa.", this.excepcionRecibida.getMessage());
+                break;
+            }
+            case "un producto": {
+                Assert.assertEquals("No se encontró la version producto", this.excepcionRecibida.getMessage());
+                break;
+            }
+            default:
+                Assert.fail("No se esperaba esta excepción");
+        }
     }
 
     @Given("^Los datos obligatorios ingresados para un nuevo ticket pero con el \"([^\"]*)\" menor a cero$")
-    public void los_datos_obligatorios_ingresados_para_un_nuevo_ticket_pero_con_el_menor_a_cero(String arg1){
-        Assert.assertTrue(true);
+    public void los_datos_obligatorios_ingresados_para_un_nuevo_ticket_pero_con_el_menor_a_cero(String arg){
+        String titulo = "Problema con SIU";
+        String descripcion = "Problema al querer anotarme con Argerich y Mendez a la vez D:";
+        Integer legajoCliente = 0;
+        Integer legajoEmpleado = 0;
+        Integer idVersionProducto = 0;
+        TipoTicket tipoTicket = TipoTicket.CONSULTA;
+        Severidad severidadTicket = Severidad.S1;
 
+        switch (arg) {
+            case "número de legajo del cliente": {
+                legajoCliente = -10;
+                legajoEmpleado = 1 + new Random().nextInt(empleados_validos.size() - 1);
+                idVersionProducto = 1 +  new Random().nextInt(productService.getVersionesProductos().size() - 1);
+                break;
+            }
+            case "número de legajo de la persona asignada": {
+                legajoCliente = 1 + new Random().nextInt(clientes_validos.size() - 1);
+                legajoEmpleado = -10;
+                idVersionProducto = 1 +  new Random().nextInt(productService.getVersionesProductos().size() - 1);
+                break;
+            }
+            case "id del producto": {
+                legajoCliente = 1 + new Random().nextInt(clientes_validos.size() - 1);
+                legajoEmpleado = 1 + new Random().nextInt(empleados_validos.size() - 1);
+                idVersionProducto = -10;
+                break;
+            }
+            default:
+                Assert.fail("No se esperaba esta excepción");
+        }
+        ticketRequest = new TicketRequest(titulo, descripcion, legajoCliente, legajoEmpleado, idVersionProducto, tipoTicket, severidadTicket);
     }
 
     @And("^Solicitará que reingrese \"([^\"]*)\" correctamente\\.$")
-    public void solicitará_que_reingrese_correctamente(String arg1){
-        Assert.assertTrue(true);
-
+    public void solicitará_que_reingrese_correctamente(String arg){
+        switch (arg) {
+            case "el legajo del cliente": {
+                Assert.assertEquals("El id del cliente no puede ser negativo", this.excepcionRecibida.getMessage());
+                break;
+            }
+            case "el legajo de la persona asignada": {
+                Assert.assertEquals("El legajo no puede ser negativo", this.excepcionRecibida.getMessage());
+                break;
+            }
+            case "el id del producto": {
+                Assert.assertEquals("El id de la version de producto no puede ser negativo", this.excepcionRecibida.getMessage());
+                break;
+            }
+            default:
+                Assert.fail("No se esperaba esta excepción");
+        }
     }
 
     @After
     public void tearDown() {
         System.out.println("After all test execution");
-
     }
 }

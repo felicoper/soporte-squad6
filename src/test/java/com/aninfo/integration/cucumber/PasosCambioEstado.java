@@ -2,29 +2,18 @@ package com.aninfo.integration.cucumber;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
 
-import com.soporte.Exceptions.ClienteInvalidoExcepcion;
-import com.soporte.model.Cliente;
 import com.soporte.model.Producto;
 import com.soporte.model.Severidad;
 import com.soporte.model.Ticket;
 import com.soporte.model.TicketRequest;
 import com.soporte.model.TipoTicket;
 import com.soporte.model.VersionProducto;
-import com.soporte.model.Empleado;
-import com.soporte.model.EstadoTicket;
 
-import cucumber.api.java.After;
 import cucumber.api.java.Before;
-import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import org.junit.Assert;
-
-import ch.qos.logback.core.joran.conditional.ElseAction;
 
 public class PasosCambioEstado extends SoporteApplicationTest {
     TicketRequest ticketRequest;

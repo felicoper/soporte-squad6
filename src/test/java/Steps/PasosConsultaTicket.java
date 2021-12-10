@@ -1,10 +1,7 @@
 package Steps;
 
 import cucumber.api.java.en.*;
-
 import com.aninfo.integration.cucumber.SoporteApplicationTest;
-
-import org.junit.jupiter.api.Assertions;
 
 public class PasosConsultaTicket extends SoporteApplicationTest {
 

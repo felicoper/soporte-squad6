@@ -61,7 +61,6 @@ public class SoporteApplication {
 		productService.saveDatabaseVersion(versionProducto4);
 		productService.saveDatabaseVersion(versionProducto5);
 		productService.saveDatabaseVersion(versionProducto6);
-
 	}
 
 	@Bean

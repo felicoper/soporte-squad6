@@ -28,6 +28,10 @@ public class EmpleadoService {
     }
 
     public Empleado findById(Integer legajo) throws EmpleadoInvalidoExcepcion{
+        if (legajo < 0) {
+            throw new EmpleadoInvalidoExcepcion("El legajo no puede ser negativo");
+        }
+        
         Optional<Empleado> empleado_externs = this.getEmpleados().stream().filter(item -> item.getId().equals(legajo)).findFirst();
 
         if(empleado_externs.isPresent()){
