@@ -1,5 +1,6 @@
 package com.soporte.service;
 
+import com.soporte.Exceptions.NoExisteElProducto;
 import com.soporte.Exceptions.VersionProductoInexistente;
 import com.soporte.Exceptions.VersionProductoSinTicketsExcepcion;
 import com.soporte.model.Producto;
@@ -12,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
+import javax.validation.constraints.Null;
 
 
 @Service
@@ -67,12 +71,12 @@ public class ProductoService {
         return versiones;
     }
 
-    public VersionProducto getVersionProducto(Integer id) throws VersionProductoInexistente{
-        if (id < 0){
+    public VersionProducto getVersionProducto(Integer id_version) throws VersionProductoInexistente{
+        if (id_version < 0){
             throw new VersionProductoInexistente("El id de la version de producto no puede ser negativo");
         }
 
-        Optional<VersionProducto> version = versionProductoRepository.findById(id);
+        Optional<VersionProducto> version = versionProductoRepository.findById(id_version);
         if(version.isPresent()) {
             return version.get();
         }else{
@@ -90,5 +94,16 @@ public class ProductoService {
             throw new VersionProductoSinTicketsExcepcion("No se encontró la version producto existente");
         }
     }
+    public Optional<Producto> getProducto(Integer id_producto){
+        return productoRepository.findById(id_producto);
 
+    }
+    
+    public Collection<VersionProducto> getVersionesOFProducto(Integer id_producto) throws NoExisteElProducto { //ojo es de un producto solo
+        Optional<Producto> producto = productoRepository.findById(id_producto);
+        if (!producto.isPresent()){
+            throw new NoExisteElProducto("El producto no existe");
+        }
+        return producto.get().getVersionesProducto();
+    }
 }
