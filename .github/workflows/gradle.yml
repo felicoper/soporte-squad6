@@ -24,4 +24,4 @@ jobs:
         with:
           version: '11'
       - name: test gradle
-        run: ./gradlew test || true
+        run: chmod +x ./gradlew
