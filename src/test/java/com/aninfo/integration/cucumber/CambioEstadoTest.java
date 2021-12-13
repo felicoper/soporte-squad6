@@ -96,7 +96,7 @@ public class CambioEstadoTest extends SoporteApplicationTest {
         change.put("estado", EstadoTicket.EDESARROLLO);
 
         try {
-            ticketService.updateTicket(ticketCreado.getNumeroTicket(), change);
+            ticketCreado = ticketService.updateTicket(ticketCreado.getNumeroTicket(), change);
         } catch (RuntimeException excepcionRecibida) {
             this.excepcionRecibida = excepcionRecibida;
         }
@@ -104,18 +104,18 @@ public class CambioEstadoTest extends SoporteApplicationTest {
 
     @Then("^el sistema registra el cambio de estado del ticket$")
     public void registroCambioDeEstado() {
-        Assert.assertEquals(EstadoTicket.ECLIENTE, ticketCreado.getEstadoTicket(),);
+        Assert.assertEquals(EstadoTicket.ECLIENTE, ticketService.getTicketById(ticketCreado.getNumeroTicket()).getEstadoTicket());
         
     }
 
     @Then("^indica que se cambio el estado exitosamente$")
     public void indicarCambioExitoso() {
-        // ...
+        Assert.assertTrue(excepcionRecibida == null);
     }
 
     @Then("^el sistema indica que pasara a cerrar el ticket y no se podra volver a cambiar el estado$")
     public void indicarCierreTicket() {
-        Assert.assertEquals(EstadoTicket.CERRADO, ticketCreado.getEstadoTicket());
+        Assert.assertEquals(EstadoTicket.CERRADO, ticketService.getTicketById(ticketCreado.getNumeroTicket()).getEstadoTicket());
     }
 
     @Then("^pregunta si desea continuar con el cierre del ticket$")
