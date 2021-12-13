@@ -32,8 +32,6 @@ public class ConsultaVersionTest extends SoporteApplicationTest{
     TicketRequest ticketRequest;
     Ticket ticketCreado;
     RuntimeException excepcionRecibida;
-    ArrayList<Integer> clientes_validos = new ArrayList<Integer>();
-    ArrayList<Integer> empleados_validos = new ArrayList<Integer>();
     Integer id_producto_consultada;
     ArrayList<VersionProducto> versiones_producto = new ArrayList<VersionProducto>();
 
@@ -42,11 +40,9 @@ public class ConsultaVersionTest extends SoporteApplicationTest{
 
     @Before
     public void setup() throws ParseException {
-       System.out.println("Before any test execution");
-
-       this.clientes_validos = clientExternService.getClientsExterns().stream().map(Cliente::getId).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-       this.empleados_validos = empleadoService.getEmpleados().stream().map(Empleado::getId).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+        this.setup_all();
     }
+  
 
     private Integer obtenerLegajoEmpleadoInexistente() {
         int i = clientes_validos.size();
@@ -101,6 +97,11 @@ public class ConsultaVersionTest extends SoporteApplicationTest{
     @Then("^El sistema muestra un mensaje donde explica que no existe ese producto en la empresa$")
     public void el_sistema_muestra_un_mensaje_donde_explica_que_no_existe_ese_producto_en_la_empresa(){
         assertEquals(excepcionRecibida.getMessage(),"El producto no existe");
+    }
+
+    @After
+    public void tearDown() {
+        System.out.println("After all test execution");
     }
 
 }

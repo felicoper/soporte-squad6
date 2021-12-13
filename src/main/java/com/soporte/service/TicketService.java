@@ -4,6 +4,7 @@ import com.soporte.Exceptions.CambioEstadoTicketCerradoExcepcion;
 import com.soporte.Exceptions.CamposFaltantesTicketExcepcion;
 import com.soporte.Exceptions.ClienteInvalidoExcepcion;
 import com.soporte.Exceptions.EmpleadoInvalidoExcepcion;
+import com.soporte.Exceptions.TicketCerradoExcepcion;
 import com.soporte.Exceptions.TicketInexistenteExcepcion;
 import com.soporte.Exceptions.VersionProductoInexistente;
 import com.soporte.model.Cliente;
@@ -105,8 +106,19 @@ public class TicketService {
     }
 
     private void cambioEstadoTicket(Ticket ticket, EstadoTicket estado) {
-        ticket.setEstadoTicket(estado);
-        if (estado == EstadoTicket.CERRADO) ticket.finalizarTicket();
+        if (estado == EstadoTicket.CERRADO)
+            ticket.finalizarTicket();
+        else 
+            ticket.setEstadoTicket(estado);
 
+    }
+
+    public void finalizarTicket(Integer numeroTicket) throws TicketCerradoExcepcion {
+        Ticket ticket = ticketRepository.findById(numeroTicket).orElseThrow(() -> new TicketInexistenteExcepcion("No existe el ticket con id " + numeroTicket));
+        
+        if (ticket.getEstadoTicket() == EstadoTicket.CERRADO) throw new TicketCerradoExcepcion("El ticket ya está cerrado");
+
+        ticket.finalizarTicket();
+        ticketRepository.save(ticket);
     }
 }

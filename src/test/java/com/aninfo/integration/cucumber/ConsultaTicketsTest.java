@@ -13,6 +13,8 @@ import com.soporte.model.Ticket;
 import com.soporte.model.TicketRequest;
 import com.soporte.model.TipoTicket;
 import com.soporte.model.Empleado;
+
+import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -22,24 +24,18 @@ public class ConsultaTicketsTest extends SoporteApplicationTest {
     TicketRequest ticketRequest;
     Ticket ticketCreado;
     RuntimeException excepcionRecibida;
-    ArrayList<Integer> clientes_validos = new ArrayList<Integer>();
-    ArrayList<Integer> empleados_validos = new ArrayList<Integer>();
     Integer id_producto_consultada;
     ArrayList<Ticket> tickets = new ArrayList<Ticket>();
 
     Integer idVersionProductoValido;
     Integer idVersionProductoValidoUno;
     Integer idVersionProductoInvalido;
-    Integer idTicketCreado;
-    
+
     @Before
     public void setup() throws ParseException {
-        System.out.println("Before any test execution");
- 
-        this.clientes_validos = clientExternService.getClientsExterns().stream().map(Cliente::getId).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-        this.empleados_validos = empleadoService.getEmpleados().stream().map(Empleado::getId).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+        this.setup_all();
     }
-
+  
     @Given("^Hay tickets asociados a una versión de producto determinada$")
     public void ticketsEnSistemaSobreVersionDeProducto() {
         idVersionProductoValido = 1 +  new Random().nextInt(productService.getVersionesProductos().size() - 1);
@@ -53,7 +49,6 @@ public class ConsultaTicketsTest extends SoporteApplicationTest {
         ticketRequest = new TicketRequest(titulo, descripcion, legajoClienteValido, legajoEmpleadoValido, idVersionProductoValido, tipoTicket, severidadTicket);
 
         ticketCreado = ticketService.createTicket(ticketRequest);
-        idTicketCreado = ticketCreado.getNumeroTicket();
     }
 
     @When("^El ingeniero de soporte consulte los tickets de una version de producto$")
@@ -70,7 +65,7 @@ public class ConsultaTicketsTest extends SoporteApplicationTest {
     @Then("^El sistema muestra el conjunto de todos los tickets registrados$")
     public void sistemaMuestraLosTickets() {
         assertNotNull(tickets);
-        ticketService.deleteById(idTicketCreado);
+        ticketService.deleteById(ticketCreado.getNumeroTicket());
     }
     
     @Given("^No hay tickets asociados a una versión de producto determinada$")
@@ -81,6 +76,11 @@ public class ConsultaTicketsTest extends SoporteApplicationTest {
     @Then("^El sistema mostrara un mensaje donde explica que no hay tickets registrados en el sistema para esa version del producto$")
     public void sistemaMuestraMensajeDeError() {
         assertEquals(excepcionRecibida.getMessage(), "La version de producto no tiene tickets registrados");
+    }
+
+    @After
+    public void tearDown() {
+        System.out.println("After all test execution");
     }
     
 }

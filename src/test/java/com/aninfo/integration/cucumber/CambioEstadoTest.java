@@ -34,21 +34,15 @@ public class CambioEstadoTest extends SoporteApplicationTest {
     TicketRequest ticketRequest;
     Ticket ticketCreado;
     RuntimeException excepcionRecibida;
-    ArrayList<Integer> clientes_validos = new ArrayList<Integer>();
-    ArrayList<Integer> empleados_validos = new ArrayList<Integer>();
 
     Integer ticketPosible;
     Integer ticketCerrado;
 
     @Before
     public void setup() throws ParseException {
-        System.out.println("Before any test execution");
-
-        this.clientes_validos = clientExternService.getClientsExterns().stream().map(Cliente::getId)
-                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-        this.empleados_validos = empleadoService.getEmpleados().stream().map(Empleado::getId).collect(ArrayList::new,
-                ArrayList::add, ArrayList::addAll);
+        this.setup_all();
     }
+  
 
     @Given("^ticket existente con estado \"([^\"]*)\"$")
     public void ticketExistenteEstadoNoCerrado(String estadoActual) {
@@ -96,7 +90,7 @@ public class CambioEstadoTest extends SoporteApplicationTest {
         change.put("estado", EstadoTicket.EDESARROLLO);
 
         try {
-            ticketCreado = ticketService.updateTicket(ticketCreado.getNumeroTicket(), change);
+            ticketService.updateTicket(ticketCreado.getNumeroTicket(), change);
         } catch (RuntimeException excepcionRecibida) {
             this.excepcionRecibida = excepcionRecibida;
         }
@@ -126,5 +120,10 @@ public class CambioEstadoTest extends SoporteApplicationTest {
     @Then("^el sistema indica que no se puede cambiar el estado de un ticket cerrado$")
     public void indicarQueNoSePuedeCambiarEstadoDeTicketCerrado() {
         assertEquals(excepcionRecibida.getMessage(), "El ticket ya está cerrado");
+    }
+
+    @After
+    public void tearDown() {
+        System.out.println("After all test execution");
     }
 }

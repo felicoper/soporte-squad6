@@ -13,6 +13,8 @@ import com.soporte.model.TicketRequest;
 import com.soporte.model.TipoTicket;
 import com.soporte.model.Empleado;
 import com.soporte.model.EstadoTicket;
+
+import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -23,22 +25,16 @@ public class CambioPersonaAsignadaTest extends SoporteApplicationTest {
     TicketRequest ticketRequest;
     Ticket ticketCreado;
     RuntimeException excepcionRecibida;
-    ArrayList<Integer> clientes_validos = new ArrayList<Integer>();
-    ArrayList<Integer> empleados_validos = new ArrayList<Integer>();
 
     Integer legajoEmpleado = 0;
     Integer legajoEmpleadoAnterior = 0;
 
+  
     @Before
     public void setup() throws ParseException {
-        System.out.println("Before any test execution");
-
-        this.clientes_validos = clientExternService.getClientsExterns().stream().map(Cliente::getId)
-                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-        this.empleados_validos = empleadoService.getEmpleados().stream().map(Empleado::getId).collect(ArrayList::new,
-                ArrayList::add, ArrayList::addAll);
+        this.setup_all();
     }
-
+  
     private Integer obtenerLegajoEmpleadoInexistente() {
         int i = clientes_validos.size();
         while (i > 0) {
@@ -128,5 +124,10 @@ public class CambioPersonaAsignadaTest extends SoporteApplicationTest {
     @Then("^el sistema no registrara la persona asignada en el ticket y solicitara que ingrse los datos de una persona existente en la empresa$")
     public void noRegistrarPersonaAsignada() {
         assertEquals(excepcionRecibida.getMessage(), "El empleado no pertenece a la empresa.");
+    }
+
+    @After
+    public void tearDown() {
+        System.out.println("After all test execution");
     }
 }

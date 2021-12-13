@@ -1,6 +1,5 @@
 package com.aninfo.integration.cucumber;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -12,7 +11,13 @@ import com.soporte.model.Ticket;
 import com.soporte.model.TicketRequest;
 import com.soporte.model.TipoTicket;
 import com.soporte.model.VersionProducto;
+
+import org.junit.Assert;
+
 import com.soporte.model.Empleado;
+import com.soporte.model.EstadoTicket;
+
+import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -22,22 +27,15 @@ public class CerrarTicketTest extends SoporteApplicationTest{
     TicketRequest ticketRequest;
     Ticket ticketCreado;
     RuntimeException excepcionRecibida;
-    ArrayList<Integer> clientes_validos = new ArrayList<Integer>();
-    ArrayList<Integer> empleados_validos = new ArrayList<Integer>();
     Integer id_producto_consultada;
-    ArrayList<VersionProducto> versiones_producto = new ArrayList<VersionProducto>();
 
     Integer idVersionProductoValido;
     Integer idVersionProductoInvalido;
-    Integer idTicketCreado;
-
     @Before
     public void setup() throws ParseException {
-       System.out.println("Before any test execution");
-
-       this.clientes_validos = clientExternService.getClientsExterns().stream().map(Cliente::getId).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-       this.empleados_validos = empleadoService.getEmpleados().stream().map(Empleado::getId).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+        this.setup_all();
     }
+  
 
     @Given("^Ticket existente con estado no cerrado$")
     public void ticketExistenteNoCerradp () {
@@ -52,13 +50,12 @@ public class CerrarTicketTest extends SoporteApplicationTest{
         ticketRequest = new TicketRequest(titulo, descripcion, legajoClienteValido, legajoEmpleadoValido, idVersionProductoValido, tipoTicket, severidadTicket);
 
         ticketCreado = ticketService.createTicket(ticketRequest);
-        idTicketCreado = ticketCreado.getNumeroTicket();
     }
 
     @When("^El ingeniero de soporte cierre el ticket$")
     public void cierreDeTicket() {
         try {
-            ticketCreado.finalizarTicket();
+            ticketService.finalizarTicket(ticketCreado.getNumeroTicket());
         }
         catch (RuntimeException excepcionRecibida) {
             this.excepcionRecibida = excepcionRecibida;
@@ -67,7 +64,9 @@ public class CerrarTicketTest extends SoporteApplicationTest{
 
     @Then("^El sistema registra que se cerro el ticket, guarda la fecha de cierre y notifica que se cerro exitosamente$")
     public void sistemaRegistraElCierreGuardaLaFechaDeCierreYAvisaQueSeCerroBien() {
-        assertEquals(excepcionRecibida.getMessage(), "Se cerró el ticket correctamente");
+        Assert.assertNotNull(ticketService.getTicketById(ticketCreado.getNumeroTicket()).getFechaCierre());
+        Assert.assertTrue(ticketService.getTicketById(ticketCreado.getNumeroTicket()).getEstadoTicket().equals(EstadoTicket.CERRADO));
+        ticketService.deleteById(ticketCreado.getNumeroTicket());
     }
 
     @Given("^Ticket existente con estado cerrado$")
@@ -83,16 +82,17 @@ public class CerrarTicketTest extends SoporteApplicationTest{
         ticketRequest = new TicketRequest(titulo, descripcion, legajoClienteValido, legajoEmpleadoValido, idVersionProductoValido, tipoTicket, severidadTicket);
 
         ticketCreado = ticketService.createTicket(ticketRequest);
-        try {
-            ticketCreado.finalizarTicket();
-        }
-        catch (RuntimeException e) {
-            // no hace nada
-        }
+        ticketService.finalizarTicket(ticketCreado.getNumeroTicket());
     }
 
     @Then("^El sistema indica que el ticket ya se encuentra cerrado$")
     public void sistemaAvisaQueNoSePuedeCerrarTicketCerrado() {
-        assertEquals(excepcionRecibida.getMessage(), "El ticket se encuentra cerrado");
+        Assert.assertEquals(excepcionRecibida.getMessage(), "El ticket ya está cerrado");
+        ticketService.deleteById(ticketCreado.getNumeroTicket());
+    }
+
+    @After
+    public void tearDown() {
+        System.out.println("After all test execution");
     }
 }

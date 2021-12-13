@@ -5,6 +5,7 @@ import javax.persistence.*;
 import com.soporte.Exceptions.TicketCerradoExcepcion;
 
 import java.util.Date;
+
 @Entity
 @Table(name = "tickets")
 public class Ticket {
@@ -22,25 +23,29 @@ public class Ticket {
     private Date fechaCreacion;
     private Date fechaFinalizacion;
 
-    //Referencias a los ids
+    // Referencias a los ids
     private Integer idCliente;
     private Integer legajoEmpleado;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idVersionproducto", referencedColumnName = "idVersionProducto")
     private VersionProducto versionProducto;
 
-   /*     // TODO!!
-    @OneToMany(mappedBy = "versionProducto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Integer> tareaID  = new ArrayList<>();
-*/
+    /*
+     * // TODO!!
+     * 
+     * @OneToMany(mappedBy = "versionProducto", cascade = CascadeType.ALL,
+     * orphanRemoval = true)
+     * private List<Integer> tareaID = new ArrayList<>();
+     */
     public Ticket() {
         this.fechaCreacion = new Date();
         this.estadoTicket = EstadoTicket.ABIERTO;
         this.severidadTicket = Severidad.SIN_SEVERIDAD;
     }
 
-    public Ticket(String titulo, String descripcion, Integer idCliente, Integer legajoEmpleado, TipoTicket tipoTicket, Severidad severidadTicket) {
+    public Ticket(String titulo, String descripcion, Integer idCliente, Integer legajoEmpleado, TipoTicket tipoTicket,
+            Severidad severidadTicket) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.idCliente = idCliente;
@@ -103,13 +108,15 @@ public class Ticket {
         return this.descripcion = descripcion;
     }
 
-    public void setIdCliente(Integer idCliente){
+    public void setIdCliente(Integer idCliente) {
         this.idCliente = idCliente;
     }
-    public void setLegajoEmpleado(Integer legajoEmpleado){
+
+    public void setLegajoEmpleado(Integer legajoEmpleado) {
         this.legajoEmpleado = legajoEmpleado;
     }
-    public void setVersionProducto(VersionProducto version){
+
+    public void setVersionProducto(VersionProducto version) {
         this.versionProducto = version;
     }
 
@@ -129,12 +136,16 @@ public class Ticket {
         this.estadoTicket = estado;
     }
 
-    public void finalizarTicket() throws TicketCerradoExcepcion{
-        if (this.estadoTicket == EstadoTicket.CERRADO)
-            throw new TicketCerradoExcepcion("El ticket se encuentra cerrado");
-            
+    public void finalizarTicket(){
+        this.setEstadoTicket(EstadoTicket.CERRADO);
+        this.setFechaCierre();
+    }
+
+    public Date getFechaCierre() {
+        return this.fechaFinalizacion;
+    }
+
+    public void setFechaCierre() {
         this.fechaFinalizacion = new Date();
-        this.estadoTicket = EstadoTicket.CERRADO;
-        throw new TicketCerradoExcepcion("Se cerró el ticket correctamente");
     }
 }

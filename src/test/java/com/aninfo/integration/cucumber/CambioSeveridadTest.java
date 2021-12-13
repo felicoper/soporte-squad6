@@ -28,17 +28,12 @@ public class CambioSeveridadTest extends SoporteApplicationTest{
     TicketRequest ticketRequest;
     Ticket ticketCreado;
     RuntimeException excepcionRecibida;
-    ArrayList<Integer> clientes_validos = new ArrayList<Integer>();
-    ArrayList<Integer> empleados_validos = new ArrayList<Integer>();
 
     @Before
     public void setup() throws ParseException {
-       System.out.println("Before any test execution");
-
-       this.clientes_validos = clientExternService.getClientsExterns().stream().map(Cliente::getId).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-       this.empleados_validos = empleadoService.getEmpleados().stream().map(Empleado::getId).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+        this.setup_all();
     }
-
+  
     @Given("^ticket existente con estado no cerrado$")
     public void ticket_existente_con_estado_no_cerrado()  {
         String titulo = "Problema con SIU";
@@ -92,5 +87,10 @@ public class CambioSeveridadTest extends SoporteApplicationTest{
     public void sistema_no_registra_el_cambio_de_severidad(){
         assertEquals(excepcionRecibida.getMessage(),"El ticket ya está cerrado");
    
+    }
+
+    @After
+    public void tearDown() {
+        System.out.println("After all test execution");
     }
 }
