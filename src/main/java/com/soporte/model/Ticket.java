@@ -2,6 +2,8 @@ package com.soporte.model;
 
 import javax.persistence.*;
 
+import com.soporte.Exceptions.TicketCerradoExcepcion;
+
 import java.util.Date;
 @Entity
 @Table(name = "tickets")
@@ -127,7 +129,12 @@ public class Ticket {
         this.estadoTicket = estado;
     }
 
-    public void finalizarTicket(){
+    public void finalizarTicket() throws TicketCerradoExcepcion{
+        if (this.estadoTicket == EstadoTicket.CERRADO)
+            throw new TicketCerradoExcepcion("El ticket se encuentra cerrado");
+            
         this.fechaFinalizacion = new Date();
+        this.estadoTicket = EstadoTicket.CERRADO;
+        throw new TicketCerradoExcepcion("Se cerró el ticket correctamente");
     }
 }
