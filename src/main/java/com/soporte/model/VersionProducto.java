@@ -31,8 +31,8 @@ public class VersionProducto {
     protected Producto producto;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "versionProducto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ticket> tickets  = new ArrayList<>();
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "versionProducto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ticket> tickets = new ArrayList<>();
 
     public VersionProducto(Integer idVersionProducto, String versionProducto, Date fechaLanzamiento) {
         this.idVersionProducto = idVersionProducto;
