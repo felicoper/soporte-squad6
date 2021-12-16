@@ -1,5 +1,5 @@
 [![Java CI](https://github.com/felicoper/soporte-squad6/actions/workflows/gradle.yml/badge.svg?branch=main)](https://github.com/felicoper/soporte-squad6/actions/workflows/gradle.yml)
-![Módulo de Soporte - PSA](https://img.shields.io/badge/M%C3%B3dulo%20de%20Soporte-PSA-red)
+[![Squad](https://img.shields.io/badge/Squad-6-red)
 ![Materia e Institución](https://img.shields.io/badge/An%C3%A1lisis%20de%20la%20Informaci%C3%B3n-FIUBA-blue)
 
 
