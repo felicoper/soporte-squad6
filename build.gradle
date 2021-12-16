@@ -32,7 +32,6 @@ dependencies {
     testImplementation group: 'com.h2database', name: 'h2', version: '1.4.200'
     runtimeOnly 'org.postgresql:postgresql'
 
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile('org.postgresql:postgresql')
 
     testImplementation("info.cukes:cucumber-java:1.2.5")
