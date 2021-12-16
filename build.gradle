@@ -32,6 +32,8 @@ dependencies {
     testImplementation group: 'com.h2database', name: 'h2', version: '1.4.200'
     runtimeOnly 'org.postgresql:postgresql'
 
+    implementation 'org.Apache.Tomcat:Tomcat-jdbc'
+    
     compile('org.postgresql:postgresql')
 
     testImplementation("info.cukes:cucumber-java:1.2.5")
