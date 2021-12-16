@@ -28,7 +28,7 @@ dependencies {
     implementation group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
     implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.8.0'
     
-    //implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
+    implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
     runtimeOnly 'org.postgresql:postgresql'
 
     testImplementation("info.cukes:cucumber-java:1.2.5")
