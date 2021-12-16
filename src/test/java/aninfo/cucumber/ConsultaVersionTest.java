@@ -1,4 +1,4 @@
-package com.aninfo.integration.cucumber;
+package aninfo.cucumber;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -6,27 +6,17 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.soporte.model.Cliente;
-import com.soporte.model.Severidad;
 import com.soporte.model.Ticket;
 import com.soporte.model.TicketRequest;
-import com.soporte.model.TipoTicket;
 import com.soporte.model.VersionProducto;
-import com.soporte.repository.VersionProductoRepository;
-import com.soporte.service.ProductoService;
-import com.soporte.model.Empleado;
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import net.bytebuddy.agent.builder.AgentBuilder.Listener;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
+import io.cucumber.java.en.When;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 
-import org.hibernate.mapping.Collection;
 import org.junit.Assert;
 
-import antlr.Version;
 
 public class ConsultaVersionTest extends SoporteApplicationTest{
     TicketRequest ticketRequest;
@@ -43,28 +33,6 @@ public class ConsultaVersionTest extends SoporteApplicationTest{
         this.setup_all();
     }
   
-
-    private Integer obtenerLegajoEmpleadoInexistente() {
-        int i = clientes_validos.size();
-        while (i > 0) {
-            i++;
-            if (!empleados_validos.contains(i)) {
-                return i;
-            }
-        }
-        return null;
-    }
-
-    private Integer obtenerLegajoClienteInexistente() {
-        int i = clientes_validos.size();
-        while (i > 0) {
-            i++;
-            if (!clientes_validos.contains(i)) {
-                return i;
-            }
-        }
-        return null;
-    }
 
     @Given("^Hay versiones de un producto registrados en sistema$")
     public void versionesDeUnProductoRegristradosEnSistema() {

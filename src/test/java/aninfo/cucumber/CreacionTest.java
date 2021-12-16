@@ -1,32 +1,35 @@
-package com.aninfo.integration.cucumber;
+package aninfo.cucumber;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Random;
 
-import com.soporte.model.Cliente;
 import com.soporte.model.Severidad;
 import com.soporte.model.Ticket;
 import com.soporte.model.TicketRequest;
 import com.soporte.model.TipoTicket;
-import com.soporte.model.Empleado;
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
+import io.cucumber.java.en.When;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.And;
 import org.junit.Assert;
 
 public class CreacionTest extends SoporteApplicationTest{
     TicketRequest ticketRequest;
     Ticket ticketCreado;
     RuntimeException excepcionRecibida;
+  
+   
+
     @Before
-    public void setup() throws ParseException {
+    public void setup() throws ParseException, java.text.ParseException {
         this.setup_all();
     }
-  
+    @After
+    public void tearDown() {
+        System.out.println("After all test execution");
+    }
 
     private Integer obtenerLegajoEmpleadoInexistente() {
         int i = clientes_validos.size();
@@ -209,8 +212,5 @@ public class CreacionTest extends SoporteApplicationTest{
         }
     }
 
-    @After
-    public void tearDown() {
-        System.out.println("After all test execution");
-    }
+ 
 }

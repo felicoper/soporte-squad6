@@ -1,9 +1,9 @@
-package com.aninfo.integration.cucumber;
+package aninfo.cucumber;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-import com.soporte.SoporteApplication;
 import com.soporte.model.Empleado;
 import com.soporte.model.Producto;
 import com.soporte.model.VersionProducto;
@@ -15,16 +15,9 @@ import com.soporte.service.EmpleadoService;
 import com.soporte.service.ProductoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-import cucumber.api.java.Before;
-import io.cucumber.core.gherkin.messages.internal.gherkin.internal.com.eclipsesource.json.ParseException;
 
-@ContextConfiguration(classes = SoporteApplication.class)
-@WebAppConfiguration
-@SpringBootTest(classes = SoporteApplication.class)
+
 public class SoporteApplicationTest {
     @Autowired
     protected TicketService ticketService;
@@ -43,7 +36,6 @@ public class SoporteApplicationTest {
 
     protected ArrayList<Integer> clientes_validos = new ArrayList<Integer>();
     protected ArrayList<Integer> empleados_validos = new ArrayList<Integer>();
-
    
     public void setup_all() throws ParseException, java.text.ParseException {
        System.out.println("Before any test execution");
@@ -76,4 +68,7 @@ public class SoporteApplicationTest {
 		productService.saveDatabaseVersion(versionProducto5);
 		productService.saveDatabaseVersion(versionProducto6);
     }
+
+
+
 }
