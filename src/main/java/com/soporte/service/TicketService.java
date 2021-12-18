@@ -43,10 +43,14 @@ public class TicketService {
     @Transactional
     public Ticket createTicket(@Valid TicketRequest ticketRequest) throws CamposFaltantesTicketExcepcion, VersionProductoInexistente,ClienteInvalidoExcepcion,EmpleadoInvalidoExcepcion {
         Cliente cliente = clienteExternService.findById(ticketRequest.getIdCliente());
-        Empleado empleado = empleadoService.findById(ticketRequest.getLegajoEmpleado());
         VersionProducto versionProducto = productoService.getVersionProducto(ticketRequest.getIdVersionProducto());
 
-        Ticket ticketCreado = new Ticket(ticketRequest.getTitulo(), ticketRequest.getDescripcion(), cliente.getId(), empleado.getId(), ticketRequest.getTipoTicket(), ticketRequest.getSeveridadTicket());
+        Empleado empleado = null;
+        if(ticketRequest.getLegajoEmpleado() != null){
+            empleado = empleadoService.findById(ticketRequest.getLegajoEmpleado());
+        }
+
+        Ticket ticketCreado = new Ticket(ticketRequest.getTitulo(), ticketRequest.getDescripcion(), cliente.getId(), empleado != null ? empleado.getId() : null , ticketRequest.getTipoTicket(), ticketRequest.getSeveridadTicket());
 
         ticketCreado.setVersionProducto(versionProducto);
         ticketRepository.save(ticketCreado);
@@ -87,6 +91,7 @@ public class TicketService {
                     ticket.setDescripcion((String) value); 
                     break;
                 } 
+                case "tarea": ticket.addTarea((Integer) value); break; // TODO!! call SERVICE.......... THIS.ADDTAREA... EXCEPTION....
                 case "estado": cambioEstadoTicket(ticket, EstadoTicket.valueOf(value.toString())); break;
                 case "severidadTicket": ticket.setSeveridadTicket((Severidad) Severidad.valueOf(value.toString())); break;
                 case "tipoTicket": ticket.setTipoTicket((TipoTicket) TipoTicket.valueOf(value.toString())); break;
@@ -108,14 +113,14 @@ public class TicketService {
     private void cambioEstadoTicket(Ticket ticket, EstadoTicket estado) {
         if (estado == EstadoTicket.CERRADO)
             ticket.finalizarTicket();
-        else 
+        else
             ticket.setEstadoTicket(estado);
 
     }
 
     public void finalizarTicket(Integer numeroTicket) throws TicketCerradoExcepcion {
         Ticket ticket = ticketRepository.findById(numeroTicket).orElseThrow(() -> new TicketInexistenteExcepcion("No existe el ticket con id " + numeroTicket));
-        
+
         if (ticket.getEstadoTicket() == EstadoTicket.CERRADO) throw new TicketCerradoExcepcion("El ticket ya está cerrado");
 
         ticket.finalizarTicket();
