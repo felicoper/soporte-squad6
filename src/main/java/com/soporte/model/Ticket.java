@@ -2,9 +2,9 @@ package com.soporte.model;
 
 import javax.persistence.*;
 
-import com.soporte.Exceptions.TicketCerradoExcepcion;
-
+import java.util.Set;
 import java.util.Date;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "tickets")
@@ -31,13 +31,10 @@ public class Ticket {
     @JoinColumn(name = "idVersionproducto", referencedColumnName = "idVersionProducto")
     private VersionProducto versionProducto;
 
-    /*
-     * // TODO!!
-     * 
-     * @OneToMany(mappedBy = "versionProducto", cascade = CascadeType.ALL,
-     * orphanRemoval = true)
-     * private List<Integer> tareaID = new ArrayList<>();
-     */
+    @ElementCollection
+    @Column(name="idTareas")
+    private Set<Integer> idTareas = new HashSet<>();
+     
     public Ticket() {
         this.fechaCreacion = new Date();
         this.estadoTicket = EstadoTicket.ABIERTO;
@@ -120,6 +117,10 @@ public class Ticket {
         this.versionProducto = version;
     }
 
+    public void addTarea(Integer idTarea) {
+        this.idTareas.add(idTarea);
+    }
+
     public Severidad getSeveridadTicket() {
         return this.severidadTicket;
     }
@@ -147,5 +148,9 @@ public class Ticket {
 
     public void setFechaCierre() {
         this.fechaFinalizacion = new Date();
+    }
+
+    public Set<Integer> getIdTareas() {
+        return this.idTareas;
     }
 }

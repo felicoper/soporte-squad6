@@ -76,6 +76,7 @@ public class TicketService {
 
         changes.forEach( (change, value) -> {
             switch (change) {
+                case "tarea": ticket.addTarea((Integer) value); break; // TODO!! call SERVICE.......... THIS.ADDTAREA... EXCEPTION....
                 case "titulo": ticket.setTitulo((String) value); break;
                 case "descripcion": ticket.setDescripcion((String) value); break;
                 case "estado": cambioEstadoTicket(ticket, EstadoTicket.valueOf(value.toString())); break;
