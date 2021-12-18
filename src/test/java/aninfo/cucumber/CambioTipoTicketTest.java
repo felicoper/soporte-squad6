@@ -31,8 +31,8 @@ public class CambioTipoTicketTest extends SoporteApplicationTest {
         this.setup_all();
     }
 
-    @Given("^ticket existente con estado \"([^\"]*)\"$")
-    public void ticketExistenteConEstado(String estadoActual) {
+    @Given("^ticket con estado \"([^\"]*)\"$")
+    public void ticketConEstado(String estadoActual) {
         String titulo = "Problema con SIU";
         String descripcion = "Problema al querer anotarme D:";
         Integer legajoCliente = 1 + new Random().nextInt(clientes_validos.size() - 1);
@@ -67,7 +67,8 @@ public class CambioTipoTicketTest extends SoporteApplicationTest {
 
     @Then("^el sistema registra el cambio de tipo del ticket$")
     public void registrarCambioTipoTicket() {
-        Assert.assertEquals(TipoTicket.INCIDENCIA, ticketCreado.getTipoTicket());
+        Ticket ticket = ticketService.getTicketById(ticketCreado.getNumeroTicket());
+        Assert.assertEquals(TipoTicket.INCIDENCIA, ticket.getTipoTicket());
     }
 
     @Then("^el sistema indica que no se puede cambiar el tipo de un ticket cerrado$")

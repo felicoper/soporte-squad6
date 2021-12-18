@@ -1,6 +1,7 @@
 package com.soporte.service;
 
 import com.soporte.Exceptions.CambioEstadoTicketCerradoExcepcion;
+import com.soporte.Exceptions.CampoVacioException;
 import com.soporte.Exceptions.CamposFaltantesTicketExcepcion;
 import com.soporte.Exceptions.ClienteInvalidoExcepcion;
 import com.soporte.Exceptions.EmpleadoInvalidoExcepcion;
@@ -76,20 +77,19 @@ public class TicketService {
 
         changes.forEach( (change, value) -> {
             switch (change) {
-                case "titulo": ticket.setTitulo((String) value); break;
-                case "descripcion": ticket.setDescripcion((String) value); break;
+                case "titulo":{
+                    if(value.equals("")|| value == null) throw new CampoVacioException("El campo obligatorio esta vacío");
+                    ticket.setTitulo((String) value); 
+                    break;
+                } 
+                case "descripcion":{
+                    if(value.equals("") || value == null) throw new CampoVacioException("El campo obligatorio esta vacío");
+                    ticket.setDescripcion((String) value); 
+                    break;
+                } 
                 case "estado": cambioEstadoTicket(ticket, EstadoTicket.valueOf(value.toString())); break;
                 case "severidadTicket": ticket.setSeveridadTicket((Severidad) Severidad.valueOf(value.toString())); break;
                 case "tipoTicket": ticket.setTipoTicket((TipoTicket) TipoTicket.valueOf(value.toString())); break;
-                case "versionProducto": {
-                    VersionProducto versionProducto = productoService.getVersionProducto((Integer) value);
-                    ticket.setVersionProducto(versionProducto);
-                    break;
-                }
-                case "idCliente": {
-                    if(clienteExternService.findById((Integer) value) != null); ticket.setIdCliente((Integer) value);
-                    break;
-                }
                 case "legajoEmpleado": {
                     if (empleadoService.findById((Integer) value) != null); ticket.setLegajoEmpleado((Integer) value);
                     break;
