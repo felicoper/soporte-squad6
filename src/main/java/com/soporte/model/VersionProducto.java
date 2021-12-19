@@ -25,8 +25,7 @@ public class VersionProducto {
     private String versionProducto;
     private Date fechaLanzamiento;
 
-    @JsonIgnore
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(referencedColumnName = "id")
     protected Producto producto;
 
@@ -36,7 +35,6 @@ public class VersionProducto {
 
     public VersionProducto(Integer idVersionProducto, String versionProducto, Date fechaLanzamiento) {
         this.idVersionProducto = idVersionProducto;
-        //this.producto = producto;
         this.versionProducto = versionProducto;
         this.fechaLanzamiento = fechaLanzamiento;
     }

@@ -30,4 +30,9 @@ public class ProductoController {
 	public Collection<VersionProducto> getVersionesProducto(){
 		return productService.getVersionesProductos();
 	}
+
+	@GetMapping("/versiones-productos/{id_version_producto}")
+	public VersionProducto getVersion(@PathVariable Integer id_version_producto){
+		return productService.getVersionProducto(id_version_producto);
+	}
 }
