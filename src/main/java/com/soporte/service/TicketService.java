@@ -83,15 +83,15 @@ public class TicketService {
             switch (change) {
                 case "titulo":{
                     if(value.equals("")|| value == null) throw new CampoVacioException("El campo obligatorio esta vacío");
-                    ticket.setTitulo((String) value); 
+                    ticket.setTitulo((String) value);
                     break;
-                } 
+                }
                 case "descripcion":{
                     if(value.equals("") || value == null) throw new CampoVacioException("El campo obligatorio esta vacío");
-                    ticket.setDescripcion((String) value); 
+                    ticket.setDescripcion((String) value);
                     break;
-                } 
-                case "tarea": ticket.addTarea((Integer) value); break; // TODO!! call SERVICE.......... THIS.ADDTAREA... EXCEPTION....
+                }
+                case "tarea": ticket.addTarea((String) value); break; // TODO!! call SERVICE.......... THIS.ADDTAREA... EXCEPTION....
                 case "estado": cambioEstadoTicket(ticket, EstadoTicket.valueOf(value.toString())); break;
                 case "severidadTicket": ticket.setSeveridadTicket((Severidad) Severidad.valueOf(value.toString())); break;
                 case "tipoTicket": ticket.setTipoTicket((TipoTicket) TipoTicket.valueOf(value.toString())); break;
