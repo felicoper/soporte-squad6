@@ -3,8 +3,6 @@ package aninfo.cucumber;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.text.ParseException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import com.soporte.model.Severidad;
@@ -13,7 +11,6 @@ import com.soporte.model.TicketRequest;
 import com.soporte.model.TipoTicket;
 import com.soporte.model.EstadoTicket;
 
-import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Given;
