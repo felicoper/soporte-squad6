@@ -33,8 +33,8 @@ public class Ticket {
 
     @ElementCollection
     @Column(name="idTareas")
-    private Set<Integer> idTareas = new HashSet<>();
-     
+    private Set<String> idTareas = new HashSet<>();
+
     public Ticket() {
         this.fechaCreacion = new Date();
         this.estadoTicket = EstadoTicket.ABIERTO;
@@ -117,7 +117,7 @@ public class Ticket {
         this.versionProducto = version;
     }
 
-    public void addTarea(Integer idTarea) {
+    public void addTarea(String idTarea) {
         this.idTareas.add(idTarea);
     }
 
@@ -150,7 +150,7 @@ public class Ticket {
         this.fechaFinalizacion = new Date();
     }
 
-    public Set<Integer> getIdTareas() {
+    public Set<String> getIdTareas() {
         return this.idTareas;
     }
 }
