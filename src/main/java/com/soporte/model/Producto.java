@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "productos")
 public class Producto {
@@ -14,7 +16,8 @@ public class Producto {
 
     private String nombre;
 
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true, fetch=FetchType.LAZY)
+    @JsonIgnore
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true, fetch=FetchType.EAGER)
     private List<VersionProducto> versionesProducto  = new ArrayList<>();
 
     public Producto(Integer idProducto, String nombre) {
