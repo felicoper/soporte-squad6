@@ -19,6 +19,9 @@ import io.cucumber.java.en.Then;
 import java.util.Set;
 
 import org.junit.Assert;
+import org.junit.runner.RunWith;
+
+import cucumber.api.junit.Cucumber;
 
 public class GeneracionTareaTicketTest extends SoporteApplicationTest {
     TicketRequest ticketRequest;
@@ -35,7 +38,7 @@ public class GeneracionTareaTicketTest extends SoporteApplicationTest {
         this.setup_all();
     }
 
-    @Given("^un ticket no cerrado y una tarea con su identificador \"([^\"]*)\" a cero$")
+    @Given("^un ticket no cerrado y una tarea con su identificador \"([^\"]*)\"$")
     public void ticketNoCerradoYTareaConId(String arg){
         String titulo = "Problema con SIU";
         String descripcion = "Problema al querer anotarme D:";
@@ -49,11 +52,11 @@ public class GeneracionTareaTicketTest extends SoporteApplicationTest {
                 tipoTicket, severidadTicket);
         ticketCreado = ticketService.createTicket(ticketRequest);
 
-        if(arg.equals("mayor")){
+        if(arg.equals("correcto")){
             idTarea = "2";
         }
         else{
-            idTarea = "-1";
+            idTarea = null;
         }
     }
 
@@ -76,9 +79,9 @@ public class GeneracionTareaTicketTest extends SoporteApplicationTest {
         Assert.assertTrue(resultado);
     }
 
-    @Then("^el sistema no registrara correctamente la tarea al ticket indicando que no se puede asignar una tarea con identificador menor o igual a cero$")
+    @Then("^el sistema no registrara correctamente la tarea al ticket indicando que no se puede asignar una tarea con identificador nulo$")
     public void noRegistrarTareaTicket(){
-        assertEquals(excepcionRecibida.getMessage(), "No se puede asignar una tarea con ID menor o igual a cero");
+        assertEquals(excepcionRecibida.getMessage(), "No se puede asignar una tarea nula");
     }
 
     @After
