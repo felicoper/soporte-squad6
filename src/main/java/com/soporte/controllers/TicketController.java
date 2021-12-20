@@ -36,11 +36,6 @@ public class TicketController {
 		return ticketService.createTicket(ticket);
 	}
 
-	@GetMapping("/tickets")
-	public Collection<Ticket> getTickets() {
-		return ticketService.getTickets();
-	}
-
 	@GetMapping("/tickets/{id_ticket}")
 	public Ticket getTicketById(@PathVariable Integer id_ticket) {
 		return ticketService.getTicketById(id_ticket);
@@ -55,11 +50,6 @@ public class TicketController {
 	public Ticket updateTicket(@PathVariable Integer id_ticket, @RequestBody Map<String, Object> changes)
 	{
 		return ticketService.updateTicket(id_ticket, changes);
-	}
-
-	@DeleteMapping("/tickets/{id}")
-	public void deleteTicket(@PathVariable Integer id) {
-		ticketService.deleteById(id);
 	}
 
 }
