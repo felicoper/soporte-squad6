@@ -5,6 +5,7 @@ import javax.persistence.*;
 import java.util.Set;
 import java.util.Date;
 import java.util.HashSet;
+import com.soporte.Exceptions.IdTareaInvalidaException;
 
 @Entity
 @Table(name = "tickets")
@@ -118,7 +119,12 @@ public class Ticket {
     }
 
     public void addTarea(String idTarea) {
-        this.idTareas.add(idTarea);
+        if(Integer.valueOf(idTarea) > 0){
+            this.idTareas.add(idTarea);
+        }
+        else{
+            throw new IdTareaInvalidaException("No se puede asignar una tarea con ID menor o igual a cero");
+        }
     }
 
     public Severidad getSeveridadTicket() {
