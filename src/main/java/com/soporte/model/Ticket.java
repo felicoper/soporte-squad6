@@ -119,11 +119,11 @@ public class Ticket {
     }
 
     public void addTarea(String idTarea) {
-        if(Integer.valueOf(idTarea) > 0){
+        if(idTarea != null){
             this.idTareas.add(idTarea);
         }
         else{
-            throw new IdTareaInvalidaException("No se puede asignar una tarea con ID menor o igual a cero");
+            throw new IdTareaInvalidaException("No se puede asignar una tarea nula");
         }
     }
 
